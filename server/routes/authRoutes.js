@@ -1,8 +1,8 @@
 import express from 'express'
-import { signup, login, logout, refresh, registerPass, refreshAccessToken } from '../controllers/authController'
-import { verifyAccessToken } from '../middlewares/authMiddleware'
-import { validateEmail, validatePassword } from '../middlewares/validateMiddleware'
-import { verifyOtp } from '../controllers/otpController'
+import { signup, login, logout, registerPass, refreshAccessToken } from '../controllers/authController.js'
+import { verifyAccessToken } from '../middlewares/authMiddleware.js'
+import { validateEmail, validatePassword } from '../middlewares/validateMiddleware.js'
+import { verifyOtp } from '../controllers/otpController.js'
 const router = express.Router()
 
 

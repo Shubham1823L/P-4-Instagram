@@ -1,15 +1,13 @@
 import nodemailer from 'nodemailer'
 import jwt from 'jsonwebtoken'
-import Otp from '../models/Otp.js';
 import env from '../config/env.js';
 import User from '../models/User.js';
-import { generateAccessToken } from '../utils/generateToken.js';
+import Otp from '../models/Otp.js'
 
 
 
-export const sendOtp = async (email) => {
-    const otp = Math.floor(Math.random() * (1_000_000 - 100_000) + 100_000)
-
+export const sendOtp = async (email,otp) => {
+  
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: { user: env.EMAIL_ID, pass: env.EMAIL_PASS }
@@ -21,10 +19,7 @@ export const sendOtp = async (email) => {
         text: `Why don't you do ${otp} pushups today?`,
     })
 
-    // Sending cookie to confirm user later
-    const otpToken = generateAccessToken(email)
-    res.cookie('otpToken', otpToken, env.COOKIE_OPTIONS)
-    await Otp.create({ otp, user: user._id })
+  
 }
 
 

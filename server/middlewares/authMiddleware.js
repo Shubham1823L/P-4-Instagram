@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-import env from '../config/env'
-import { findUserByEmail } from '../utils/userUtils'
+import env from '../config/env.js'
+import { findUserByEmail } from '../utils/userUtils.js'
 
 export const verifyAccessToken = async (req, res, next) => {
     const authHeader = req.headers['authorization']

@@ -1,13 +1,16 @@
-import { findUserByEmail } from "../utils/userUtils"
-import { sendOtp } from "./otpController"
-import { generateAccessToken, generateRefreshToken } from "../utils/generateToken"
-import env from "../config/env"
-import User from "../models/User"
+import { findUserByEmail } from "../utils/userUtils.js"
+import { sendOtp } from "./otpController.js"
+import { generateAccessToken, generateRefreshToken } from "../utils/generateToken.js"
+import env from "../config/env.js"
+import User from "../models/User.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import Otp from '../models/Otp.js';
+
 
 export async function signup(req, res) {//--> just for otp sending and email saving
     const { email } = req.body
+
     // Check if user already exists 
     try {
         const user = await findUserByEmail(email)
@@ -16,7 +19,14 @@ export async function signup(req, res) {//--> just for otp sending and email sav
         if (user && user.verified) return res.status(409).send("User already exists")
 
         // NOT verified/NEW user => Sending otp
-        sendOtp(email)
+        const otp = Math.floor(Math.random() * (1_000_000 - 100_000) + 100_000)
+        sendOtp(email,otp)
+
+        // Sending cookie to confirm user later
+        const otpToken = generateAccessToken(email)
+        res.cookie('otpToken', otpToken, env.COOKIE_OPTIONS)
+        await Otp.create({ otp, user: user._id })
+
         return res.status(200).send("Otp sent via email")
     } catch (error) {
         console.error("Error occured in user retrieval", error)
@@ -44,14 +54,14 @@ export const registerPass = async (req, res) => {
         const refreshToken = generateRefreshToken(email)
         res.cookie('refreshToken', refreshToken, env.COOKIE_OPTIONS)
     } catch (error) {
-        return res.status(500).json({ error })
+        return res.status(500).json({ error: error.details[0].message })
     }
 
     try {
         const accessToken = generateAccessToken(email)
         return res.status(201).json({ message: "Account Successfully Created!", accessToken })
     } catch (error) {
-        return res.status(500).json({ error })
+        return res.status(500).json({ error: error.details[0].message })
     }
 
 }
@@ -70,7 +80,7 @@ export const login = async (req, res) => {
         // => value = true .Therefore try block will be exited and user is authenticated
     } catch (error) {
         console.error("Error comparing password:", error)
-        return res.status(500).json({ error })
+        return res.status(500).json({ error: error.details[0].message })
     }
 
 
@@ -79,14 +89,14 @@ export const login = async (req, res) => {
         const refreshToken = generateRefreshToken(email)
         res.cookie('refreshToken', refreshToken, env.COOKIE_OPTIONS)
     } catch (error) {
-        return res.status(500).json({ error })
+        return res.status(500).json({ error: error.details[0].message })
     }
 
     try {
         const accessToken = generateAccessToken(email)
         return res.status(201).json({ message: "Account Successfully Created!", accessToken })
     } catch (error) {
-        return res.status(500).json({ error })
+        return res.status(500).json({ error: error.details[0].message })
     }
 
 
@@ -114,9 +124,9 @@ export const refreshAccessToken = async (req, res) => {
         }
     } catch (err) {
         const error = err.name
-        if (error === "TokenExpiredError") return res.status(401).json({ error })
-        if (error === "JsonWebTokenError") return res.status(401).json({ error })
-        return res.status(500).json({ error })
+        if (error === "TokenExpiredError") return res.status(401).json({ error: error.details[0].message })
+        if (error === "JsonWebTokenError") return res.status(401).json({ error: error.details[0].message })
+        return res.status(500).json({ error: error.details[0].message })
     }
 }
 
