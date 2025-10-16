@@ -1,6 +1,6 @@
 import express from 'express'
-import { signup, login, logout, refresh, registerPass } from '../controllers/authController'
-import { verifyToken } from '../middlewares/authMiddleware'
+import { signup, login, logout, refresh, registerPass, refreshAccessToken } from '../controllers/authController'
+import { verifyAccessToken } from '../middlewares/authMiddleware'
 import { validateEmail, validatePassword } from '../middlewares/validateMiddleware'
 import { verifyOtp } from '../controllers/otpController'
 const router = express.Router()
@@ -14,9 +14,9 @@ router.post('/signup/register', validatePassword, registerPass)
 
 router.post('/login', validateEmail, validatePassword, login)
 
-router.post('/logout', verifyToken, logout)
+router.post('/logout', verifyAccessToken, logout)
 
-router.post('/refresh', refresh)
+router.post('/refresh', refreshAccessToken)
 
 
 export default router

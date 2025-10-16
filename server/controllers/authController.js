@@ -2,9 +2,9 @@ import { findUserByEmail } from "../utils/userUtils"
 import { sendOtp } from "./otpController"
 import { generateAccessToken, generateRefreshToken } from "../utils/generateToken"
 import env from "../config/env"
-import Otp from "../models/Otp"
 import User from "../models/User"
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 export async function signup(req, res) {//--> just for otp sending and email saving
     const { email } = req.body
@@ -56,9 +56,7 @@ export const registerPass = async (req, res) => {
 
 }
 
-
 // Let user Login even if he is already logged in for multi device support
-
 export const login = async (req, res) => {
     const { email, password } = req.body //--> already non-empty , valid format
     const user = await findUserByEmail(email)
@@ -93,4 +91,34 @@ export const login = async (req, res) => {
 
 
 }
+
+export const logout = async (req, res) => {
+    res.clearCookie('refreshToken', env.COOKIE_OPTIONS)
+    return res.sendStatus(204)
+}
+
+export const refreshAccessToken = async (req, res) => {
+    const refreshToken = req.cookies('refreshToken', env.COOKIE_OPTIONS)
+    if (!refreshToken) return res.status(404).json({ error: "Refresh Token NOT FOUND" })
+    try {
+        const decoded = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET)
+        const email = decoded.email
+        const user = await findUserByEmail(email)
+        if (!user) return res.status(404).json({ error: "User NOT FOUND" })
+        try {
+            const accessToken = generateAccessToken(email)
+            return res.status(200).json({ message: "New Access Token Generated Successfully", accessToken })
+        } catch (error) {
+            console.error("Error generating accessToken:", error)
+            return res.sendStatus(500)
+        }
+    } catch (err) {
+        const error = err.name
+        if (error === "TokenExpiredError") return res.status(401).json({ error })
+        if (error === "JsonWebTokenError") return res.status(401).json({ error })
+        return res.status(500).json({ error })
+    }
+}
+
+
 
