@@ -38,6 +38,7 @@ export const verifyOtp = async (req, res) => {
         //Set User verified :true
         await User.updateOne({ email: user.email }, { $set: { verified: true } })
         res.clearCookie('otpToken')
+        await Otp.deleteOne({user:user._id})
         return res.status(200).json({ message: "Account Verified Successfully" })
     } catch (error) {
         console.error("Error in JWT verification", error)

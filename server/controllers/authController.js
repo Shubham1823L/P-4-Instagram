@@ -13,21 +13,31 @@ export async function signup(req, res) {//--> just for otp sending and email sav
 
     // Check if user already exists 
     try {
-        const user = await findUserByEmail(email)
 
-        // verified=>Pre-exisiting registered user, 409---> includes cases of logged in/out
-        if (user && user.verified) return res.status(409).send("User already exists")
+        try {
+            const user = await findUserByEmail(email)
 
+            // verified=>Pre-exisiting registered user, 409---> includes cases of logged in/out
+            if (user && user.verified) return res.status(409).send("User already exists")
+        } catch (err) {
+            return res.status(500).json({ error: err.details[0].message })
+        }
+
+        const user = !await findUserByEmail(email) ? await User.create({ email }) : await User.findOne({ email })
         // NOT verified/NEW user => Sending otp
         const otp = Math.floor(Math.random() * (1_000_000 - 100_000) + 100_000)
-        sendOtp(email,otp)
+        sendOtp(email, otp)
 
         // Sending cookie to confirm user later
         const otpToken = generateAccessToken(email)
         res.cookie('otpToken', otpToken, env.COOKIE_OPTIONS)
+        await Otp.deleteMany({ user: user._id })
         await Otp.create({ otp, user: user._id })
 
         return res.status(200).send("Otp sent via email")
+
+
+
     } catch (error) {
         console.error("Error occured in user retrieval", error)
         return res.status(500).send("Server shit its pants, devs are sweating hard to fix this")
@@ -37,7 +47,10 @@ export async function signup(req, res) {//--> just for otp sending and email sav
 // Register Password Logic
 export const registerPass = async (req, res) => {
     const { email, password } = req.body
+    const user = await findUserByEmail(email)
 
+    if (!user) return res.status(404).json({ error: "User NOT FOUND" })
+    if (!user.verified || user.password) return res.status(409).json({ error: "User already exists , please sign in" })
     // Hash Password
     try {
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -94,7 +107,7 @@ export const login = async (req, res) => {
 
     try {
         const accessToken = generateAccessToken(email)
-        return res.status(201).json({ message: "Account Successfully Created!", accessToken })
+        return res.status(200).json({ message: "Logged in Successfully!", accessToken })
     } catch (error) {
         return res.status(500).json({ error: error.details[0].message })
     }
@@ -108,7 +121,7 @@ export const logout = async (req, res) => {
 }
 
 export const refreshAccessToken = async (req, res) => {
-    const refreshToken = req.cookies('refreshToken', env.COOKIE_OPTIONS)
+    const refreshToken = req.cookies.refreshToken
     if (!refreshToken) return res.status(404).json({ error: "Refresh Token NOT FOUND" })
     try {
         const decoded = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET)

@@ -10,7 +10,7 @@ router.post('/signup', validateEmail, signup)
 
 router.post('/signup/verify', verifyOtp)
 
-router.post('/signup/register', validatePassword, registerPass)
+router.post('/signup/register',validateEmail, validatePassword, registerPass)
 
 router.post('/login', validateEmail, validatePassword, login)
 
