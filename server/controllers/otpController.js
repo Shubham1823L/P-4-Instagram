@@ -35,13 +35,15 @@ export const verifyOtp = async (req, res) => {
     const otpToken = req.cookies.otpToken
     // Checking if received otp corresponds to correct user
     const user = (await Otp.findOne({ otp }).populate("user")).user
-    
+
     try {
         const payload = jwt.verify(otpToken, env.ACCESS_TOKEN_SECRET)
-        if (payload.email !== user.email) return res.status(400).json({messagae:"Invalid OTP"})
+        if (payload.email !== user.email) return res.status(400).json({ messagae: "Invalid OTP" })
 
         //Set User verified :true
         await User.updateOne({ email: user.email }, { $set: { verified: true } })
+        res.clearCookie('otpToken')
+        return res.status(200).json({ message: "Account Verified Successfully" })
     } catch (error) {
         console.error("Error in JWT verification", error)
         return res.status(500).json({ message: "Internal Server Error,JWT Verification Failed" })

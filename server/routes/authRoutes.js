@@ -1,5 +1,5 @@
 import express from 'express'
-import { signup, login, logout, refresh } from '../controllers/authController'
+import { signup, login, logout, refresh, registerPass } from '../controllers/authController'
 import { verifyToken } from '../middlewares/authMiddleware'
 import { validateEmail, validatePassword } from '../middlewares/validateMiddleware'
 import { verifyOtp } from '../controllers/otpController'
@@ -9,6 +9,8 @@ const router = express.Router()
 router.post('/signup', validateEmail, signup)
 
 router.post('/signup/verify', verifyOtp)
+
+router.post('/signup/register', validatePassword, registerPass)
 
 router.post('/login', validateEmail, validatePassword, login)
 
