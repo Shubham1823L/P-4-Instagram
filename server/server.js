@@ -6,7 +6,7 @@ import connectDB from './config/db.js'
 import env from './config/env.js'
 
 import authRoutes from './routes/authRoutes.js'
-// import userRoutes from './routes/userRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
 const app = express()
 
@@ -19,8 +19,8 @@ app.use(cors({
 }))
 
 app.use('/api/auth',authRoutes)
-// app.use('/api/user',userRoutes)
-// app.use('/api/otp',otpRoutes)
+app.use('/api/user',userRoutes)
+
 
 connectDB()
 app.listen(env.PORT || 3000)

@@ -12,7 +12,11 @@ export const verifyAccessToken = async (req, res, next) => {
         const decoded = jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET)
         const user = await findUserByEmail(decoded.email)
         if (!user) return res.status(404).json({ error: "User NOT FOUND" })
-        req.user = user
+        req.user = {
+            email: user.email,
+            id:user.id,
+            verified:user.verified
+        }
         return next()
     } catch (err) {
         const error = err.name
