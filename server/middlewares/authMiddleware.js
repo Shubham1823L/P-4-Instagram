@@ -10,20 +10,20 @@ export const verifyAccessToken = async (req, res, next) => {
     // accessToken acquired
     try {
         const decoded = jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET)
+
         const user = await findUserByEmail(decoded.email)
         if (!user) return res.status(404).json({ error: "User NOT FOUND" })
-        req.user = {
-            email: user.email,
-            id:user.id,
-            verified:user.verified
-        }
+        req.user = user
         return next()
     } catch (err) {
         const error = err.name
         switch (error) {
             case "TokenExpiredError": return res.status(401).json({ error: "Session/Token Expired" })
             // Frontend will handle calling refresh endpoint and recalling the needed endpoint
-            case "JsonWebTokenError": return res.status(401).json({ error: "Invalid Session/Token, please relogin" })
+            case "JsonWebTokenError": {
+                res.clearCookie('refreshToken', env.COOKIE_OPTIONS)
+                return res.status(401).json({ error: "Invalid Session/Token, please relogin" })
+            }
             default: return res.sendStatus(500)
         }
     }

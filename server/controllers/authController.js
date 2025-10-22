@@ -9,7 +9,7 @@ import Otp from '../models/Otp.js';
 
 
 export async function signup(req, res) {//--> just for otp sending and email saving
-    const { email } = req.body
+    const { email ,username} = req.body
 
     // Check if user already exists 
     try {
@@ -23,7 +23,7 @@ export async function signup(req, res) {//--> just for otp sending and email sav
             return res.status(500).json({ error: err.details[0].message })
         }
 
-        const user = !await findUserByEmail(email) ? await User.create({ email }) : await User.findOne({ email })
+        const user = !await findUserByEmail(email) ? await User.create({ email,username }) : await User.findOne({ email })
         // NOT verified/NEW user => Sending otp
         const otp = Math.floor(Math.random() * (1_000_000 - 100_000) + 100_000)
         sendOtp(email, otp)
@@ -82,7 +82,7 @@ export const registerPass = async (req, res) => {
 // Let user Login even if he is already logged in for multi device support
 export const login = async (req, res) => {
     const { email, password } = req.body //--> already non-empty , valid format
-    const user = await findUserByEmail(email)
+    const user = await User.findOne({email}).select('+password')
     if (!user || !user.verified) return res.status(404).json({ message: "Email not registered. Please signup first" })
 
     // Authenticate using password
@@ -122,7 +122,7 @@ export const logout = async (req, res) => {
 
 export const refreshAccessToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken
-    if (!refreshToken) return res.status(404).json({ error: "Refresh Token NOT FOUND" })
+    if (!refreshToken) return res.status(404).json({ error: "Refresh Token NOT FOUND, please re-login" })
     try {
         const decoded = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET)
         const email = decoded.email

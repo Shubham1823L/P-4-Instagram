@@ -6,7 +6,8 @@ import connectDB from './config/db.js'
 import env from './config/env.js'
 
 import authRoutes from './routes/authRoutes.js'
-import userRoutes from './routes/userRoutes.js'
+import profileRoutes from './routes/profileRoutes.js'
+import followRoutes from './routes/followRoutes.js'
 
 const app = express()
 
@@ -19,7 +20,8 @@ app.use(cors({
 }))
 
 app.use('/api/auth',authRoutes)
-app.use('/api/user',userRoutes)
+app.use('/api/profile',profileRoutes)
+app.use('/api',followRoutes)
 
 
 connectDB()
