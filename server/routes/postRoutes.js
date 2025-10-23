@@ -1,13 +1,15 @@
 import express from 'express'
-import { createPost, getFeedPosts, getPost } from '../controllers/postController'
-import { verifyAccessToken } from '../middlewares/authMiddleware'
+import { createPost, getFeedPosts, getPost } from '../controllers/postController.js'
+import { verifyAccessToken } from '../middlewares/authMiddleware.js'
 const router = express.Router()
 
 router.post('/',verifyAccessToken,createPost)
 
+router.get('/feed',verifyAccessToken,getFeedPosts)
+
 router.get('/:postId',getPost)
 
-router.get('/feed',verifyAccessToken,getFeedPosts)
+
 
 
 export default router
