@@ -38,7 +38,11 @@ const userSchema = new mongoose.Schema({
     followingCount: {
         type:Number,
         default:0
-    } //No. of ppl whom this user follows
+    },//No. of ppl whom this user follows
+    posts:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Post"
+    }]
 })
 
 export default mongoose.model('User', userSchema)
