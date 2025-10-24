@@ -15,8 +15,12 @@ const postSchema=new mongoose.Schema({
     commentsCount:{
         type:Number,
         default:0
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now
     }
-    
+
 })
 
 export default mongoose.model('Post',postSchema)

@@ -25,25 +25,50 @@ export const getPost = async (req, res) => {
 
 export const getFeedPosts = async (req, res) => {
     const user = req.user
-    const following = (await user.populate({
-        path: 'following',
-        populate: {
-            path: 'posts',
-            select: '-__v -_id',
-            populate:{
-                path:'author',
-                select:'username -_id'
+    const following = user.following
+    console.log(user)
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
+
+    const posts = await Post.aggregate([
+        {
+            $match: { author: { $in: following } }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "author",
+                foreignField: "_id",
+                as: "author"
+            }
+        },
+        {
+            $unwind: "$author"
+        },
+        {
+            $sort: { createdAt: -1 }
+        },
+        {
+            $skip: (page - 1) * limit
+        },
+        {
+            $limit: limit
+        },
+        {
+            $project: {
+                likesCount:1,
+                commentsCount:1,
+                createdAt:1,
+                text:1,
+                author:{
+                    username:1,
+                    _id:1,
+                    followersCount:1
+                }
             }
         }
-    })).following
-
-    const posts = []
-    following.forEach(e=> {
-        e.posts.forEach(post => {
-            posts.push(post)
-        });
-    });
-    return res.status(200).json({ posts })
+    ])
+    return res.status(200).json(posts)
 }
 
 
