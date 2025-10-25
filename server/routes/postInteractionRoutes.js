@@ -12,12 +12,11 @@ router.use(async (req, res, next) => {
     req.post = post
     next()
 })
+
 router.post('/like', verifyAccessToken, toggleLike)
 
 router.post('/comment', verifyAccessToken, createComment)
 
 router.get('/comments', getComments)
-
-
 
 export default router

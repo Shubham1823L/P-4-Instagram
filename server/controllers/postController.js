@@ -56,14 +56,14 @@ export const getFeedPosts = async (req, res) => {
         },
         {
             $project: {
-                likesCount:1,
-                commentsCount:1,
-                createdAt:1,
-                text:1,
-                author:{
-                    username:1,
-                    _id:1,
-                    followersCount:1
+                likesCount: 1,
+                commentsCount: 1,
+                createdAt: 1,
+                text: 1,
+                commentsCount: 1,
+                author: {
+                    username: 1,
+                    followersCount: 1
                 }
             }
         }
