@@ -1,7 +1,7 @@
 import express from 'express'
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
 import User from '../models/User.js'
-import { getProfileData, updateProfileData } from '../controllers/profileController.js'
+import { deleteProfile, getProfileData, updateProfileData } from '../controllers/profileController.js'
 
 
 
@@ -11,8 +11,7 @@ router.get('/:username', getProfileData)
 
 router.patch('/update', verifyAccessToken, updateProfileData)
 
-
-
+router.delete('/', verifyAccessToken, deleteProfile)
 
 
 router.param('username', async (req, res, next, username) => {

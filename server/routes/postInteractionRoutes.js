@@ -1,5 +1,5 @@
 import express from 'express'
-import { createComment, getComments, toggleLike } from '../controllers/postInteractionController.js'
+import { createComment, deleteComment, getComments, toggleLike } from '../controllers/postInteractionController.js'
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
 import Post from '../models/Post.js'
 
@@ -18,5 +18,7 @@ router.post('/like', verifyAccessToken, toggleLike)
 router.post('/comment', verifyAccessToken, createComment)
 
 router.get('/comments', getComments)
+
+router.delete('/comments/:commentId', verifyAccessToken, deleteComment)
 
 export default router

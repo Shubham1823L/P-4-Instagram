@@ -7,6 +7,11 @@ const postSchema = new mongoose.Schema({
         required: true,
     },
     text: String,
+    img: {
+        url: String,
+        publicId: String,
+    },
+    
     likesCount: {
         type: Number,
         default: 0
@@ -16,14 +21,14 @@ const postSchema = new mongoose.Schema({
         default: 0
     },
     comments: [{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Comment"
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment"
     }],
     createdAt: {
         type: Date,
         default: Date.now
     },
-    likedBy: [{
+    likes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }],

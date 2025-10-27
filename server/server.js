@@ -10,6 +10,7 @@ import profileRoutes from './routes/profileRoutes.js'
 import followRoutes from './routes/followRoutes.js'
 import postRoutes from './routes/postRoutes.js'
 import postInteractionRoutes from './routes/postInteractionRoutes.js'
+import uploadRoutes from './routes/uploadRoutes.js'
 
 const app = express()
 
@@ -26,6 +27,7 @@ app.use('/api/profile',profileRoutes)
 app.use('/api',followRoutes)
 app.use('/api/posts',postRoutes)
 app.use('/api/posts/:id',postInteractionRoutes)
+app.use('/api/upload',uploadRoutes)
 
 
 connectDB()

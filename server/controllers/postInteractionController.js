@@ -1,19 +1,21 @@
 import Comment from "../models/Comment.js"
+import Post from "../models/Post.js"
+import commentCleanupService from '../services/commentCleanupService.js'
 
 export const toggleLike = async (req, res) => {
     const user = req.user
     const post = req.post
-    const likedBy = post.likedBy
-    if (likedBy.find(e => e.equals(user._id))) {
+    const likes = post.likes
+    if (likes.find(e => e.equals(user._id))) {
         //Already Liked , unlike post now
-        likedBy.pull(user._id)
+        likes.pull(user._id)
         post.likesCount--
         await post.save()
         return res.status(200).json({ message: "Post like removed" })
     }
     else {
         //Not liked yet, like post now
-        likedBy.push(user._id)
+        likes.push(user._id)
         post.likesCount++
         await post.save()
         return res.status(200).json({ message: "Post liked" })
@@ -41,7 +43,7 @@ export const getComments = async (req, res) => {
     const post = req.post
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
-    
+
     const comments = await Comment.aggregate([
         {
             $match: { _id: { $in: post.comments } }
@@ -80,5 +82,18 @@ export const getComments = async (req, res) => {
     ])
     return res.status(200).json(comments)
 }
+
+export const deleteComment = async (req, res) => {
+    const user = req.user
+    const comment = await Comment.findOne({ _id: req.params.commentId })
+
+    if (!comment) return res.status(404).json({ error: "Comment not found!" })
+    const post = await Post.findOne({ _id: comment.post })
+    //Comment can be deleted either by the author of the comment or the author of the post
+    if (user._id != comment.author && user._id != post.author) return res.status(403).json({ error: "Forbidden! Cannot delete other user's comments" })
+    await commentCleanupService(comment)
+    res.sendStatus(204)
+}
+
 
 

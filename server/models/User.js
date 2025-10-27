@@ -6,13 +6,13 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    __v:{
-        type:Number,
-        select:false
+    __v: {
+        type: Number,
+        select: false
     },
     password: {
-        type:String,
-        select:false
+        type: String,
+        select: false
     },
     verified: {
         type: Boolean,
@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     followersCount: {
-        type:Number,
-        default:0
+        type: Number,
+        default: 0
     }, //No. of ppl who follow this user
     followers: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -36,12 +36,12 @@ const userSchema = new mongoose.Schema({
         ref: "User"
     }],
     followingCount: {
-        type:Number,
-        default:0
+        type: Number,
+        default: 0
     },//No. of ppl whom this user follows
-    posts:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Post"
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post"
     }]
 })
 

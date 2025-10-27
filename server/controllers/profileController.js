@@ -1,5 +1,6 @@
+import env from "../config/env.js"
 import User from "../models/User.js"
-
+import userCleanupService from '../services/userCleanupService.js'
 export const getProfileData = (req, res) => {
     const user = req.user
     res.status(200).json({ user })
@@ -23,4 +24,11 @@ export const updateProfileData = async (req, res) => {
     }
     await User.updateOne({ _id }, updated)
     res.status(200).json({ message: "Profile Updated" })
+}
+
+export const deleteProfile = async (req, res) => {
+    const user = req.user
+    await userCleanupService(user)
+    res.clearCookie('refreshToken', env.COOKIE_OPTIONS)
+    return res.sendStatus(204)
 }

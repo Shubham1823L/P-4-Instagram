@@ -1,5 +1,6 @@
 import Post from '../models/Post.js'
 import User from '../models/User.js'
+import postCleanupService from '../services/postCleanupService.js'
 
 export const createPost = async (req, res) => {
     const postData = req.body
@@ -70,5 +71,17 @@ export const getFeedPosts = async (req, res) => {
     ])
     return res.status(200).json(posts)
 }
+
+export const deletePost = async (req, res) => {
+    const user = req.user
+    const post = await Post.findById(req.params.postId)
+
+    if (!post) return res.status(404).json({ error: "Post not found!" })
+    if (post.author != user._id) return res.status(403).json({ error: "Forbidden! Cannot delete posts of other users" })
+
+    await postCleanupService(post)
+    res.sendStatus(204)
+}
+
 
 
