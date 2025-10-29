@@ -9,7 +9,7 @@ import Otp from '../models/Otp.js';
 
 
 export async function signup(req, res) {//--> just for otp sending and email saving
-    const { email ,username} = req.body
+    const { email, username } = req.body
 
     // Check if user already exists 
     try {
@@ -23,7 +23,7 @@ export async function signup(req, res) {//--> just for otp sending and email sav
             return res.status(500).json({ error: err.details[0].message })
         }
 
-        const user = !await findUserByEmail(email) ? await User.create({ email,username }) : await User.findOne({ email })
+        const user = !await findUserByEmail(email) ? await User.create({ email, username }) : await User.findOne({ email })
         // NOT verified/NEW user => Sending otp
         const otp = Math.floor(Math.random() * (1_000_000 - 100_000) + 100_000)
         sendOtp(email, otp)
@@ -82,7 +82,7 @@ export const registerPass = async (req, res) => {
 // Let user Login even if he is already logged in for multi device support
 export const login = async (req, res) => {
     const { email, password } = req.body //--> already non-empty , valid format
-    const user = await User.findOne({email}).select('+password')
+    const user = await User.findOne({ email }).select('+password')
     if (!user || !user.verified) return res.status(404).json({ message: "Email not registered. Please signup first" })
 
     // Authenticate using password
@@ -107,7 +107,10 @@ export const login = async (req, res) => {
 
     try {
         const accessToken = generateAccessToken(email)
-        return res.status(200).json({ message: "Logged in Successfully!", accessToken })
+        return res.status(200).json({
+            message: "Logged in Successfully!",
+            accessToken,user
+        })
     } catch (error) {
         return res.status(500).json({ error: error.details[0].message })
     }
@@ -130,7 +133,7 @@ export const refreshAccessToken = async (req, res) => {
         if (!user) return res.status(404).json({ error: "User NOT FOUND" })
         try {
             const accessToken = generateAccessToken(email)
-            return res.status(200).json({ message: "New Access Token Generated Successfully", accessToken })
+            return res.status(200).json({ message: "New Access Token Generated Successfully", accessToken, user })
         } catch (error) {
             console.error("Error generating accessToken:", error)
             return res.sendStatus(500)

@@ -18,11 +18,11 @@ export const verifyAccessToken = async (req, res, next) => {
     } catch (err) {
         const error = err.name
         switch (error) {
-            case "TokenExpiredError": return res.status(401).json({ error: "Session/Token Expired" })
+            case "TokenExpiredError": return res.status(401).json({ name:error,message:"Session/Token Expired" })
             // Frontend will handle calling refresh endpoint and recalling the needed endpoint
             case "JsonWebTokenError": {
                 res.clearCookie('refreshToken', env.COOKIE_OPTIONS)
-                return res.status(401).json({ error: "Invalid Session/Token, please relogin" })
+                return res.status(401).json({ name:error,message: "Invalid Session/Token, please relogin" })
             }
             default: return res.sendStatus(500)
         }
