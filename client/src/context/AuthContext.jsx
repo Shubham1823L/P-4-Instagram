@@ -11,17 +11,23 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const refreshSession = async () => {
-            const response = await axios.post('/auth/refresh', {}, {
-                withCredentials: true,
-                baseURL: `${import.meta.env.VITE_API_BASE_URL}`
-            })
+            try {
+                const response = await axios.post('/auth/refresh', {}, {
+                    withCredentials: true,
+                    baseURL: `${import.meta.env.VITE_API_BASE_URL}`
+                })
 
-            const { accessToken, user } = response.data
-            setToken(accessToken)
-            setUser(user)
+                const { accessToken, user } = response.data
+                setToken(accessToken)
+                setUser(user)
+            } catch (error) {
+                setToken(null)
+                setUser(null)
+            }
+
 
         }
-        refreshSession().then(()=>setLoading(false))
+        refreshSession().then(() => setLoading(false))
 
     }, [])
 

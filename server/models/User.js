@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    fullName: String,
     __v: {
         type: Number,
         select: false
@@ -13,10 +14,6 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         select: false
-    },
-    verified: {
-        type: Boolean,
-        default: false
     },
     bio: String,
     username: {

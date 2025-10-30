@@ -1,0 +1,25 @@
+.logoutBtn {
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    background-color: hsl(237, 68%, 45%);
+    padding: .5em 1.5em;
+    border: 2px solid hsl(237, 68%, 39%);
+    border-radius: 5px;
+    margin: auto;
+    
+}
+
+p {
+    text-align: center;
+}
+
+.userDataWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    align-items: flex-start;
+    width: fit-content;
+    margin: auto;
+    margin-block-end: 1rem;
+}

@@ -3,87 +3,69 @@ import { sendOtp } from "./otpController.js"
 import { generateAccessToken, generateRefreshToken } from "../utils/generateToken.js"
 import env from "../config/env.js"
 import User from "../models/User.js"
+import TempToken from "../models/Temp_verification_token.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import Otp from '../models/Otp.js';
 
 
 export async function signup(req, res) {//--> just for otp sending and email saving
-    const { email, username } = req.body
+    const { email, username, fullName, password } = req.body
 
-    // Check if user already exists 
     try {
 
+        // Is the email already registered
         try {
             const user = await findUserByEmail(email)
-
-            // verified=>Pre-exisiting registered user, 409---> includes cases of logged in/out
-            if (user && user.verified) return res.status(409).send("User already exists")
+            if (user) return res.status(409).json({ error: "User already exists", code: "USER_ALREADY_EXISTS" })
+            //User must sign in , redirect him to signin page
         } catch (err) {
             return res.status(500).json({ error: err.details[0].message })
         }
 
-        const user = !await findUserByEmail(email) ? await User.create({ email, username }) : await User.findOne({ email })
-        // NOT verified/NEW user => Sending otp
-        const otp = Math.floor(Math.random() * (1_000_000 - 100_000) + 100_000)
+        //User does not exist yet 
+        // Check if username is available
+        try {
+            const user = await User.findOne({ username })
+            if (user) return res.status(409).json({ error: "Username is taken", code: "USERNAME_IS_TAKEN" })
+            // Username is already taken , ask user to select a different one
+        } catch (error) {
+            return res.status(500).json({ error: err.details[0].message })
+        }
+
+        // Username is available , creating a temporary verification token and sending otp
+        const otp = Math.floor(Math.random() * (1e6 - 1e5) + 1e5)
         sendOtp(email, otp)
 
         // Sending cookie to confirm user later
-        const otpToken = generateAccessToken(email)
-        res.cookie('otpToken', otpToken, env.COOKIE_OPTIONS)
-        await Otp.deleteMany({ user: user._id })
-        await Otp.create({ otp, user: user._id })
+        const otp_uuid = crypto.randomUUID()
+        await TempToken.create({ email, password, username, fullName, otp, otp_uuid })
+        res.cookie("email", email, {
+            sameSite: "Strict",
+            maxAge: 15 * 60 * 1000
+        })
+        res.cookie("otp_uuid", otp_uuid, {
+            httpOnly: true,
+            sameSite: "Strict",
+            maxAge: 15 * 60 * 1000
+        })
 
-        return res.status(200).send("Otp sent via email")
+        return res.status(200).json({ message: "Otp sent" })
 
 
 
     } catch (error) {
         console.error("Error occured in user retrieval", error)
-        return res.status(500).send("Server shit its pants, devs are sweating hard to fix this")
+        return res.status(500).json({ error: "Error occured in user retrieval", error })
     }
 }
 
-// Register Password Logic
-export const registerPass = async (req, res) => {
-    const { email, password } = req.body
-    const user = await findUserByEmail(email)
-
-    if (!user) return res.status(404).json({ error: "User NOT FOUND" })
-    if (!user.verified || user.password) return res.status(409).json({ error: "User already exists , please sign in" })
-    // Hash Password
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10)
-
-        // Store HashedPassword in db
-        await User.updateOne({ email }, { $set: { password: hashedPassword } })
-    } catch (error) {
-        console.error("Error hashing password:", error)
-        return res.sendStatus(500)
-    }
-
-    // Produce and send tokens
-    try {
-        const refreshToken = generateRefreshToken(email)
-        res.cookie('refreshToken', refreshToken, env.COOKIE_OPTIONS)
-    } catch (error) {
-        return res.status(500).json({ error: error.details[0].message })
-    }
-
-    try {
-        const accessToken = generateAccessToken(email)
-        return res.status(201).json({ message: "Account Successfully Created!", accessToken })
-    } catch (error) {
-        return res.status(500).json({ error: error.details[0].message })
-    }
-
-}
 
 // Let user Login even if he is already logged in for multi device support
 export const login = async (req, res) => {
     const { email, password } = req.body //--> already non-empty , valid format
     const user = await User.findOne({ email }).select('+password')
-    if (!user || !user.verified) return res.status(404).json({ message: "Email not registered. Please signup first" })
+    if (!user) return res.status(404).json({ message: "Email not registered. Please signup first" })
 
     // Authenticate using password
     try {
@@ -109,7 +91,7 @@ export const login = async (req, res) => {
         const accessToken = generateAccessToken(email)
         return res.status(200).json({
             message: "Logged in Successfully!",
-            accessToken,user
+            accessToken, user
         })
     } catch (error) {
         return res.status(500).json({ error: error.details[0].message })

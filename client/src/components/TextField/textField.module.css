@@ -1,0 +1,51 @@
+.inputWrapper {
+    width: 250px;
+    font-size: 12px;
+}
+
+.textFieldWrapper {
+    position: relative;
+
+    &:focus-within {
+        .placeholder {
+            font-size: 10px;
+            top: .6rem;
+        }
+    }
+
+    .textField:not(:placeholder-shown)+.placeholder {
+        font-size: 10px;
+        top: .6rem;
+    }
+}
+
+.placeholder {
+    position: absolute;
+    color: var(--clr-neutral-600);
+    left: .8rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    font-size: 12px;
+    transition: all .2s ease-in-out;
+    pointer-events: none;
+
+}
+
+.textField {
+    box-sizing: border-box;
+    background-color: var(--clr-neutral-800);
+    border: 1px solid var(--clr-border-600);
+    font-size: 12px;
+    border-radius: 2px;
+    color: white;
+    padding: 1rem .8rem .4rem .8rem;
+    width: 100%;
+
+    &::placeholder {
+        visibility: hidden;
+    }
+}
+
+.error {
+color: red;
+}
