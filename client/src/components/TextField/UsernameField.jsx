@@ -9,7 +9,7 @@ const UsernameField = ({ toggleValid }) => {
     useEffect(() => {
         if (error) toggleValid(e => ({ ...e, username: false }))
         else if (error == null) toggleValid(e => ({ ...e, username: true }))
-    }, [error])
+    }, [error, toggleValid])
 
     const handleBlur = async () => {
         const value = ref.current.value

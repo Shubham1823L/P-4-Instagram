@@ -9,7 +9,7 @@ const EmailField = ({ toggleValid }) => {
     useEffect(() => {
         if (error) toggleValid(e=>({...e,email:false}))
         else if (error == null) toggleValid(e=>({...e,email:true}))
-    }, [error])
+    }, [error,toggleValid])
 
     const handleBlur = async () => {
         const value = ref.current.value

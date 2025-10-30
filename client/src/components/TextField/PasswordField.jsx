@@ -9,7 +9,7 @@ const PasswordField = ({ toggleValid }) => {
     useEffect(() => {
         if (error) toggleValid(e => ({ ...e, password: false }))
         else toggleValid(e => ({ ...e, password: true }))
-    }, [error])
+    }, [error,toggleValid])
 
     const handleBlur = async () => {
         const value = ref.current.value

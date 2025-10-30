@@ -1,10 +1,10 @@
 import React from 'react'
 import styles from './footer.module.css'
-const Footer = () => {
+const Footer = ({className}) => {
     const footerLinks = ["Meta", "About", "Blog", "Jobs", "Help", "API", "Privacy", "Terms", "Locations", "Instagram Lite", "Meta AI", "Meta AI articles", "Threads", "Contact uploading and non-users", "Meta verified"]
 
     return (
-        <footer>
+        <footer className={className}>
             <ul className={styles.footerLinks}>
                 {footerLinks.map(e => <li><a href="#">{e}</a></li>)}
 

@@ -1,10 +1,20 @@
 .inputWrapper {
-    width: 250px;
     font-size: 12px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+
 }
 
 .textFieldWrapper {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--clr-neutral-800);
+    border: 1px solid var(--clr-border-700);
+    border-radius: 2px;
 
     &:focus-within {
         .placeholder {
@@ -19,10 +29,14 @@
     }
 }
 
+.errorBorder {
+    border-color: var(--clr-error-600);
+}
+
 .placeholder {
     position: absolute;
     color: var(--clr-neutral-600);
-    left: .8rem;
+    left: .6rem;
     top: 50%;
     transform: translate(0, -50%);
     font-size: 12px;
@@ -33,12 +47,9 @@
 
 .textField {
     box-sizing: border-box;
-    background-color: var(--clr-neutral-800);
-    border: 1px solid var(--clr-border-600);
     font-size: 12px;
-    border-radius: 2px;
     color: white;
-    padding: 1rem .8rem .4rem .8rem;
+    padding: 1rem .8rem .4rem .6rem;
     width: 100%;
 
     &::placeholder {
@@ -47,6 +58,8 @@
 }
 
 .error {
-    color: red;
-    margin-bottom: 1rem;
+    color: var(--clr-error-600);
+    margin-bottom: .5rem;
+    font-size: 10px;
+    padding-left: .6rem;
 }

@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Footer from '../../components/Footer/Footer'
 import TextField from '../../components/TextField/TextField'
 import EmailField from '../../components/TextField/EmailField'
 import UsernameField from '../../components/TextField/UsernameField'
 import PasswordField from '../../components/TextField/PasswordField'
 import FullNameField from '../../components/TextField/FullNameField'
+import { ImFacebook2 } from "react-icons/im";
 import styles from './signup.module.css'
 import clsx from 'clsx'
+import { Link } from 'react-router-dom'
 
 const Signup = () => {
     const [valid, setValid] = useState({ email: false, password: false, username: false, fullName: false })
     const [clickable, setClickable] = useState(false)
-
+    const toggleValid = useCallback((obj) => setValid(obj), [])
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log("clicked")
     }
 
     useEffect(() => {
@@ -28,13 +29,49 @@ const Signup = () => {
 
 
     return (
-        <form>
-            <EmailField toggleValid={setValid} />
-            <PasswordField toggleValid={setValid} />
-            <UsernameField toggleValid={setValid} />
-            <FullNameField toggleValid={setValid} />
-            <button onClick={handleSubmit} type='submit' className={clsx(!clickable && styles.disabled)}>Sign up</button>
-        </form>
+        <>
+            <main className={styles.hero}>
+                <div className={styles.formWrapper}>
+                    <form className={styles.form}>
+                        <h1><img src="../../../public/instagram-wordmark.svg" alt="nameLogo" /></h1>
+                        <h2 className={styles.formHeading}>Sign up to see photos and videos from your friends.</h2>
+                        <button className={clsx(styles.btnBase, styles.disabled)}>
+                            <ImFacebook2 size={18} /> Log in with Facebook
+                        </button>
+                        <div className={styles.lineBreakWrapper}>
+                            <div ></div>
+                            <p>OR</p>
+                            <div ></div>
+                        </div>
+                        <div className={styles.formFields}>
+                            <EmailField toggleValid={toggleValid} />
+                            <PasswordField toggleValid={toggleValid} />
+                            <FullNameField toggleValid={toggleValid} />
+                            <UsernameField toggleValid={toggleValid} />
+                        </div>
+                        <p>People who use our service may have uploaded your contact information to Instagram.
+                            <a href="https://www.facebook.com/help/instagram/261704639352628"> Learn more.
+                            </a>
+                        </p>
+                        <p>
+                            By signing up, you agree to our
+                            <a href="https://help.instagram.com/581066165581870/?locale=en_GB"> Terms, Privacy Policy </a>
+                            and <a href="https://privacycenter.instagram.com/policies/cookies/">Cookies Policy</a>
+                        </p>
+                        <button onClick={handleSubmit} type='submit' className={clsx(!clickable && styles.disabled, styles.btnBase)}>Sign Up</button>
+                    </form>
+                </div>
+                {/* formSibling is to change to login Page */}
+                <div className={styles.formSibling}>
+                    <p>Have an account?</p>
+                    <Link to={"/login"} >Login</Link>
+                </div>
+            </main>
+            <Footer className={styles.footer} />
+        </>
+
+
+
     )
 }
 

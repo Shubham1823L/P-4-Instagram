@@ -1,5 +1,5 @@
 footer {
-    border: 2px solid green;
+
     font-size: 12px;
     color: var(--clr-neutral-600);
     display: flex;
@@ -21,6 +21,7 @@ footer {
 }
 
 .footerBottomWrapper {
+    margin-top: .3rem;
     display: flex;
     justify-content: center;
     gap: 1rem;

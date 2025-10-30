@@ -1,47 +1,50 @@
-.loginForm {
-    font-weight: 400;
+.hero {
+    padding-top: 6rem;
     display: flex;
     flex-direction: column;
+    gap: .6rem;
+    width: 350px;
+    margin: auto;
+
+}
+
+.formWrapper {
+    padding-bottom: 1.5rem;
+}
+
+
+.formFields {
+    margin-top:1rem;
+}
+
+.loginWithFacebook {
+    display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
-    gap: 2rem;
-    background-color: hsl(0, 0%, 12%);
-    padding: 3rem 2rem ;
+    gap: .5rem;
+    color: #0395F6;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 1rem;
+}
 
-    >* {
-        margin: auto;
+.forgotPassword {
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    margin: auto;
+
+    &:hover {
+        text-decoration: underline;
     }
+}
 
-    >input {
-        width: 300px;
-        padding: .5em 1.5em;
-        font-size: 1rem;
-        background-color: hsl(0, 0%, 20%);
-        border-radius: 5px;
+.formSibling {
+    display: flex;
+    justify-content: center;
+    gap: .3rem;
+}
 
-        &::placeholder {
-            color: hsl(0, 0%, 90%);
-        }
-    }
-
-    >button {
-        all: unset;
-        margin-top: 1rem;
-        font-weight: 900;
-        padding: .5em 2em;
-        font-size: 1.5rem;
-        background-color: hsl(0, 0%, 0%);
-        border-radius: 10px;
-        text-align: center;
-        cursor: pointer;
-        transition: all .15s ease-in-out;
-
-        &:hover {
-            background-color: hsl(0, 0%, 5%);
-            scale: 1.02;
-            color: hsl(0, 0%, 100%);
-
-        }
-    }
+.footer{
+margin-top: 8.5rem;
 }
