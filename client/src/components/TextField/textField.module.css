@@ -47,5 +47,6 @@
 }
 
 .error {
-color: red;
+    color: red;
+    margin-bottom: 1rem;
 }

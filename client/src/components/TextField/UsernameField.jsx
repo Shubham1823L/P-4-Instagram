@@ -1,10 +1,15 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import TextField from './TextField'
 import { validateUsername } from '../../api/dbValidation'
 
-const UsernameField = () => {
+const UsernameField = ({ toggleValid }) => {
     const ref = useRef()
-    const [error, setError] = useState(null)
+    const [error, setError] = useState("")
+
+    useEffect(() => {
+        if (error) toggleValid(e => ({ ...e, username: false }))
+        else if (error == null) toggleValid(e => ({ ...e, username: true }))
+    }, [error])
 
     const handleBlur = async () => {
         const value = ref.current.value

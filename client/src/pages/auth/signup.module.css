@@ -1,0 +1,8 @@
+.disabled {
+    background-color: red;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.lol{
+    color: green;
+}

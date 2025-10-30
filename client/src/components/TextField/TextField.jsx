@@ -13,9 +13,9 @@ const TextField = ({ type, placeholder, handleBlur, ref, error }) => {
                     <label className={styles.placeholder}>{placeholder}</label>
                 </div>
 
-                <div className={styles.error}>
+                {error && <div className={styles.error}>
                     {error}
-                </div>
+                </div>}
             </div>
         </>
     )
