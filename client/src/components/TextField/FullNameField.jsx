@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import TextField from './TextField'
 
-const FullNameField = ({ toggleValid }) => {
-    const ref = useRef()
+const FullNameField = ({ toggleValid,ref }) => {
+
     const [error, setError] = useState("")
 
     useEffect(() => {

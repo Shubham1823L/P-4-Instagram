@@ -6,45 +6,34 @@ import TextField from '../../components/TextField/TextField'
 import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer/Footer'
 import { RiFacebookCircleFill } from "react-icons/ri";
-import { login } from '../../api/auth'
+import { verifyOtp } from '../../api/auth'
 import { useAuth } from '../../hooks/useAuth'
 
-const Login = () => {
+const EnterOtp = () => {
     const navigate = useNavigate()
-    const { updateToken, updateUser } = useAuth()
-    const [valid, setValid] = useState({ email: false, password: false })
+    const { updateUser, updateToken } = useAuth()
     const [clickable, setClickable] = useState(false)
-    const emailRef = useRef()
-    const passwordRef = useRef()
+    const ref = useRef()
+
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const email = emailRef.current.value
-        const password = passwordRef.current.value
+        const value = (ref.current.value).trim()
 
-        const data = await login(email, password)
-        if (!data) console.error("login mein error")
-        const { accessToken, user } = data
+        const response = await verifyOtp(value)
+        if (response.status >= 400) return console.error("ERROR")
+        const { user, accessToken } = response.data
         updateToken(accessToken)
         updateUser(user)
         navigate('/profile', { replace: true })
-
-        //Call loginHandler here
-    }
-    const handleEmailBlur = () => {
-        const email = emailRef.current.value
-        if (!email) return setValid(e => ({ ...e, email: false }))
-        setValid(e => ({ ...e, email: true }))
-    }
-    const handlePasswordBlur = () => {
-        const password = passwordRef.current.value
-        if (!password) return setValid(e => ({ ...e, password: false }))
-        setValid(e => ({ ...e, password: true }))
+        //Call otpHandler here
     }
 
-    useEffect(() => {
-        if (Object.values(valid).every(e => e)) setClickable(true)
+
+    const handleBlur = () => {
+        const value = (ref.current.value).trim()
+        if (value.length === 6 && parseInt(value)) setClickable(true)
         else setClickable(false)
-    }, [valid])
+    }
 
 
 
@@ -57,11 +46,12 @@ const Login = () => {
 
 
                         <div className={clsx(styles.formFields, loginStyles.formFields)}>
-                            <TextField type="email" placeholder={"Email address"} ref={emailRef} handleBlur={handleEmailBlur} />
-                            <TextField type={"password"} placeholder={"Password"} ref={passwordRef} handleBlur={handlePasswordBlur} />
+                            <TextField type={"text"} placeholder={"Enter your OTP"} ref={ref} handleBlur={handleBlur} />
                         </div>
 
-                        <button onClick={handleSubmit} type='submit' className={clsx(!clickable && styles.disabled, styles.btnBase)}>Log in</button>
+                        <button onClick={handleSubmit} type='submit' className={clsx(!clickable && styles.disabled, styles.btnBase)}>Next</button>
+                        <Link to={'#'} disabled className={loginStyles.forgotPassword}>Resend OTP</Link>
+
                         <div className={styles.lineBreakWrapper}>
                             <div ></div>
                             <p>OR</p>
@@ -72,14 +62,13 @@ const Login = () => {
                         <a href="#" disabled className={loginStyles.loginWithFacebook}>
                             <RiFacebookCircleFill size={24} /> Log in with Facebook
                         </a>
-                        <Link to={'#'} disabled className={loginStyles.forgotPassword}>Forgotten your Password?</Link>
 
                     </form>
                 </div>
                 {/* formSibling is to change to login Page */}
-                <div className={clsx(styles.formSibling, loginStyles.formSibling)}>
-                    <p>Don't have an account?</p>
-                    <Link to={"/signup"} >Sign Up</Link>
+                <div className={clsx(styles.formSibling)}>
+                    <p>Have an account?</p>
+                    <Link to={"/login"} >Login</Link>
                 </div>
 
             </main>
@@ -89,4 +78,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default EnterOtp

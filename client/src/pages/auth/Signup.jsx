@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Footer from '../../components/Footer/Footer'
 import TextField from '../../components/TextField/TextField'
 import EmailField from '../../components/TextField/EmailField'
@@ -8,14 +8,29 @@ import FullNameField from '../../components/TextField/FullNameField'
 import { ImFacebook2 } from "react-icons/im";
 import styles from './signup.module.css'
 import clsx from 'clsx'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import {  signup } from '../../api/auth'
 
 const Signup = () => {
+    const navigate = useNavigate()
+
     const [valid, setValid] = useState({ email: false, password: false, username: false, fullName: false })
     const [clickable, setClickable] = useState(false)
     const toggleValid = useCallback((obj) => setValid(obj), [])
-    const handleSubmit = (e) => {
+    const refs = {
+        email: useRef(),
+        password: useRef(),
+        username: useRef(),
+        fullName: useRef(),
+    }
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
+        const values = { email: refs.email.current.value, password: refs.password.current.value, username: refs.username.current.value, fullName: refs.fullName.current.value }
+
+        const {status} = await signup(values)
+        if (status == 200) navigate('/signup/verify', { replace: true })
+        else console.error(status,":AN ERROR OCCCURED !")
     }
 
     useEffect(() => {
@@ -33,7 +48,7 @@ const Signup = () => {
             <main className={styles.hero}>
                 <div className={styles.formWrapper}>
                     <form className={styles.form}>
-                        <h1><img src="../../../public/instagram-wordmark.svg" alt="nameLogo" /></h1>
+                        <h1><img src="../../../instagram-wordmark.svg" alt="nameLogo" /></h1>
                         <h2 className={styles.formHeading}>Sign up to see photos and videos from your friends.</h2>
                         <button className={clsx(styles.btnBase, styles.disabled)}>
                             <ImFacebook2 size={18} /> Log in with Facebook
@@ -44,10 +59,10 @@ const Signup = () => {
                             <div ></div>
                         </div>
                         <div className={styles.formFields}>
-                            <EmailField toggleValid={toggleValid} />
-                            <PasswordField toggleValid={toggleValid} />
-                            <FullNameField toggleValid={toggleValid} />
-                            <UsernameField toggleValid={toggleValid} />
+                            <EmailField toggleValid={toggleValid} ref={refs.email} />
+                            <PasswordField toggleValid={toggleValid} ref={refs.password} />
+                            <FullNameField toggleValid={toggleValid} ref={refs.fullName} />
+                            <UsernameField toggleValid={toggleValid} ref={refs.username} />
                         </div>
                         <p>People who use our service may have uploaded your contact information to Instagram.
                             <a href="https://www.facebook.com/help/instagram/261704639352628"> Learn more.

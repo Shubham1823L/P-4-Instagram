@@ -23,13 +23,25 @@ export const logout = async () => {
 
 
 export const signup = async (data) => {
-    const { email, username, password, fullName } = data
 
     try {
-        const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/signup`, data)
+        const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/signup`, data,{withCredentials:true})
+        console.log(response)
         return response
     } catch (error) {
+        console.error(error)
         return error.response
     }
 
+}
+
+export const verifyOtp =async (otp) => {
+   try {
+        const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/signup/verify`, {otp},{withCredentials:true})
+        console.log(response)
+        return response
+    } catch (error) {
+        console.log(error)
+        return error.response
+    }
 }

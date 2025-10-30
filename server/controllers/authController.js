@@ -30,7 +30,7 @@ export async function signup(req, res) {//--> just for otp sending and email sav
             if (user) return res.status(409).json({ error: "Username is taken", code: "USERNAME_IS_TAKEN" })
             // Username is already taken , ask user to select a different one
         } catch (error) {
-            return res.status(500).json({ error: err.details[0].message })
+            return res.status(500).json({ error: error.details[0].message })
         }
 
         // Username is available , creating a temporary verification token and sending otp
@@ -39,14 +39,23 @@ export async function signup(req, res) {//--> just for otp sending and email sav
 
         // Sending cookie to confirm user later
         const otp_uuid = crypto.randomUUID()
-        await TempToken.create({ email, password, username, fullName, otp, otp_uuid })
+
+        let hashedPassword
+        try {
+            hashedPassword = await bcrypt.hash(password, 10)
+        } catch (error) {
+            console.error("error finding otp_uuid " + error)
+            return res.status(500).json({ error: "error finding otp_uuid " + error })
+        }
+
+        await TempToken.create({ email, password: hashedPassword, username, fullName, otp, otp_uuid })
         res.cookie("email", email, {
-            sameSite: "Strict",
+            sameSite: "lax",
             maxAge: 15 * 60 * 1000
         })
         res.cookie("otp_uuid", otp_uuid, {
             httpOnly: true,
-            sameSite: "Strict",
+            sameSite: "lax",
             maxAge: 15 * 60 * 1000
         })
 

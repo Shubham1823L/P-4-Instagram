@@ -5,6 +5,7 @@ import Profile from '../pages/Profile/Profile'
 import ProtectedRoutes from './ProtectedRoutes'
 import AntiProtectedRoutes from './AntiProtectedRoutes'
 import Signup from '../pages/auth/Signup'
+import EnterOtp from '../pages/auth/EnterOtp'
 
 
 
@@ -17,6 +18,7 @@ export default function AppRouter() {
             <Route element={<AntiProtectedRoutes />} >
                 <Route path='/login' element={<Login />} />
                 <Route path='/signup' element={<Signup />} />
+                <Route path='/signup/verify' element={<EnterOtp />} />
             </Route>
 
             <Route element={<ProtectedRoutes />} >

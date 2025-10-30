@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import TextField from './TextField'
 import { validateUsername } from '../../api/dbValidation'
 
-const UsernameField = ({ toggleValid }) => {
-    const ref = useRef()
+const UsernameField = ({ toggleValid,ref }) => {
+
     const [error, setError] = useState("")
 
     useEffect(() => {

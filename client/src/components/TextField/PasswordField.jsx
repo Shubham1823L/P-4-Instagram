@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import TextField from './TextField'
 
-const PasswordField = ({ toggleValid }) => {
-    const ref = useRef()
+const PasswordField = ({ toggleValid,ref }) => {
+
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/
     const [error, setError] = useState("")
 

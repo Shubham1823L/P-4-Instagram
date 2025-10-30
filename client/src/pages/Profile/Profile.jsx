@@ -18,9 +18,13 @@ const Profile = () => {
     return (
         <>
             <div className={styles.userDataWrapper}>
-                <p> Hello {user.username}</p>
-                <p>Your Followers:{user.followersCount}</p>
-                <p>Following:{user.followingCount}</p>
+                {
+                    Object.keys(user).map(key => {
+                        return (
+                            <p>{key}:{user[key]}</p>
+                        )
+                    })
+                }
             </div>
             <button className={styles.logoutBtn} onClick={handleLogout}>Logout</button>
         </>
