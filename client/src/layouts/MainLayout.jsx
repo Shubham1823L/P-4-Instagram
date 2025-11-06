@@ -3,6 +3,8 @@ import styles from './mainLayout.module.css'
 import Sidebar from '../components/Sidebar/Sidebar'
 import Profile from '../pages/Profile/Profile'
 import { Outlet } from 'react-router-dom'
+import Footer from "../components/Footer/Footer"
+
 const MainLayout = () => {
     return (
         <>
@@ -10,6 +12,7 @@ const MainLayout = () => {
                 <Sidebar />
                 <main className={styles.main}>
                     <Outlet />
+                    <Footer/>
                 </main>
             </div>
         </>

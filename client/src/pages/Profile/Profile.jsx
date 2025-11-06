@@ -1,9 +1,13 @@
 import React from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import styles from './profile.module.css'
+import { NavLink, Outlet } from 'react-router-dom'
 import { FaCamera } from "react-icons/fa";
-import { IoIosSettings } from "react-icons/io";
 import { FiPlus } from "react-icons/fi";
+import { GrGrid } from "react-icons/gr";
+import { RiBookmarkLine } from "react-icons/ri";
+import { TbUserSquare } from "react-icons/tb";
+import clsx from 'clsx';
 
 const Profile = () => {
     const { user: { username, fullName, followersCount, followingCount, posts } } = useAuth()
@@ -58,17 +62,35 @@ const Profile = () => {
                         <div>
                             <div className={styles.createNewPostWrapper}>
                                 <button className={styles.createNewPost}>
-                                    <FiPlus size={56} strokeWidth={1.5} color='grey'/>
+                                    <FiPlus size={56} strokeWidth={1.5} color='grey' />
                                 </button>
                             </div>
                             New
                         </div>
-                       
+
                     </div>
                 </div>
 
 
-                <div></div>
+                <div className={styles.mainContentWrapper}>
+                    <div className={styles.mainContentNav}>
+                        <div>
+                            <NavLink to={""} end className={({ isActive }) => clsx(isActive && styles.selected, styles.navLink)} >
+                                <GrGrid size={20} />
+                            </NavLink>
+                            <NavLink to={"saved"} className={({ isActive }) => clsx(isActive && styles.selected, styles.navLink)}>
+                                <RiBookmarkLine size={24} />
+                            </NavLink>
+                            <NavLink to={"tagged"} className={({ isActive }) => clsx(isActive && styles.selected, styles.navLink)}>
+                                <TbUserSquare size={24} />
+                            </NavLink>
+                        </div>
+
+                    </div>
+                    <div className={styles.mainContent}>
+                        <Outlet />
+                    </div>
+                </div>
             </div>
         </>
     )
