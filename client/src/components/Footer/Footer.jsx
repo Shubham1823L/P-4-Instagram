@@ -1,12 +1,13 @@
 import React from 'react'
 import styles from './footer.module.css'
+import clsx from 'clsx'
 const Footer = ({className}) => {
     const footerLinks = ["Meta", "About", "Blog", "Jobs", "Help", "API", "Privacy", "Terms", "Locations", "Instagram Lite", "Meta AI", "Meta AI articles", "Threads", "Contact uploading and non-users", "Meta verified"]
 
     return (
-        <footer className={className}>
+        <footer className={clsx(className,styles.footer)}>
             <ul className={styles.footerLinks}>
-                {footerLinks.map(e => <li><a href="#">{e}</a></li>)}
+                {footerLinks.map(e => <li key={footerLinks.indexOf(e)}><a href="#">{e}</a></li>)}
 
             </ul>
 

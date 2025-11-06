@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AuthContext } from './../hooks/useAuth'
 import axios from 'axios'
+import LoadingPage from '../pages/Extras/LoadingPage'
 
 
 export const AuthProvider = ({ children }) => {
@@ -16,7 +17,6 @@ export const AuthProvider = ({ children }) => {
                     withCredentials: true,
                     baseURL: `${import.meta.env.VITE_API_BASE_URL}`
                 })
-
                 const { accessToken, user } = response.data
                 setToken(accessToken)
                 setUser(user)
@@ -27,7 +27,12 @@ export const AuthProvider = ({ children }) => {
 
 
         }
-        refreshSession().then(() => setLoading(false))
+        refreshSession().then(() => {
+            setTimeout(() => {
+                setLoading(false)
+            }, 1500);
+
+        })
 
     }, [])
 
@@ -38,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     return (
         <>
             {
-                loading ? "Loading Page" :
+                loading ? <LoadingPage /> :
                     <AuthContext.Provider value={value}>
                         {children}
                     </AuthContext.Provider>

@@ -1,25 +1,132 @@
-.logoutBtn {
-    display: block;
-    font-size: 1rem;
-    font-weight: 400;
-    background-color: hsl(237, 68%, 45%);
-    padding: .5em 1.5em;
-    border: 2px solid hsl(237, 68%, 39%);
-    border-radius: 5px;
-    margin: auto;
-    
-}
-
-p {
-    text-align: center;
-}
-
-.userDataWrapper {
+.hero {
+    height: 400px;
     display: flex;
     flex-direction: column;
+
+}
+
+.profile {
+    display: flex;
+    padding-top: 2rem;
+
+}
+
+
+.profilePicWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 4.8rem;
+}
+
+.profilePic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: hsl(0, 0%, 38%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profileData {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.profileDataHeader {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+
+    >span:first-child {
+        font-size: 1.2rem;
+    }
+}
+
+.profileRelatedBtns {
+    display: flex;
+    align-items: center;
     gap: .5rem;
-    align-items: flex-start;
-    width: fit-content;
+}
+
+.darkBtnBase {
+    background-color: var(--clr-neutral-700);
+    border-radius: 10px;
+    font-size: 14.5px;
+    font-weight: 600;
+    padding: .5em 1em;
+    transition: all .15s linear;
+
+    &:hover {
+        background-color: var(--clr-neutral-700-hover);
+    }
+}
+
+.settings:hover {
+    scale: 1.05;
+    transition: all .15s ease-in-out;
+}
+
+
+.metricsCount {
+    display: flex;
+    gap: 2.3rem;
+
+    >span {
+        display: flex;
+        gap: .2rem;
+
+        >span:first-child {
+            font-weight: 600;
+        }
+
+        >span:last-child {
+            color: var(--clr-neutral-600);
+        }
+    }
+
+}
+
+.fullName {
+    font-weight: 600;
+    font-size: 14px;
+    padding-block: .5rem;
+}
+
+.heroBottom {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding-left: 2.5rem;
+
+    >div {
+        display: grid;
+        gap: .5rem;
+        place-items: center;
+        font-size: 12px;
+        font-weight: 600;
+    }
+}
+
+.createNewPostWrapper {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 3.5px solid var(--clr-border-800);
+    padding: 3.5px;
+    cursor: pointer;
+}
+
+.createNewPost {
+    border-radius: 50%;
     margin: auto;
-    margin-block-end: 1rem;
+    width: 100%;
+    height: 100%;
+    background-color: var(--clr-neutral-800);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './signup.module.css'
 import loginStyles from './login.module.css'
 import clsx from 'clsx'
@@ -42,7 +42,7 @@ const EnterOtp = () => {
             <main className={loginStyles.hero}>
                 <div className={clsx(styles.formWrapper, loginStyles.formWrapper)}>
                     <form className={styles.form}>
-                        <h1><img src="../../../instagram-wordmark.svg" alt="nameLogo" /></h1>
+                        <h1><img src="instagram-wordmark.svg" alt="nameLogo" /></h1>
 
 
                         <div className={clsx(styles.formFields, loginStyles.formFields)}>

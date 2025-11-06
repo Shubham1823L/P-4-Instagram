@@ -9,7 +9,7 @@ import { ImFacebook2 } from "react-icons/im";
 import styles from './signup.module.css'
 import clsx from 'clsx'
 import { Link, useNavigate } from 'react-router-dom'
-import {  signup } from '../../api/auth'
+import { signup } from '../../api/auth'
 
 const Signup = () => {
     const navigate = useNavigate()
@@ -28,9 +28,17 @@ const Signup = () => {
         e.preventDefault()
         const values = { email: refs.email.current.value, password: refs.password.current.value, username: refs.username.current.value, fullName: refs.fullName.current.value }
 
-        const {status} = await signup(values)
-        if (status == 200) navigate('/signup/verify', { replace: true })
-        else console.error(status,":AN ERROR OCCCURED !")
+        
+        const response = await signup(values)
+        const { status, data } = response
+
+        if (status == 500) return console.error("Our bad, sorry for the incovenience")
+        if (status == 409 && data.code == "USER_ALREADY_EXISTS") return console.error("User already exists")
+        if (status == 409 && data.code == "USERNAME_IS_TAKEN") return console.error("Username is taken")
+
+        //All safe,otp sent 
+        navigate('/signup/verify', { replace: true })
+
     }
 
     useEffect(() => {
@@ -48,7 +56,7 @@ const Signup = () => {
             <main className={styles.hero}>
                 <div className={styles.formWrapper}>
                     <form className={styles.form}>
-                        <h1><img src="../../../instagram-wordmark.svg" alt="nameLogo" /></h1>
+                        <h1><img src="instagram-wordmark.svg" alt="nameLogo" /></h1>
                         <h2 className={styles.formHeading}>Sign up to see photos and videos from your friends.</h2>
                         <button className={clsx(styles.btnBase, styles.disabled)}>
                             <ImFacebook2 size={18} /> Log in with Facebook

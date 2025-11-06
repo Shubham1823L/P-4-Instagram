@@ -26,7 +26,6 @@ export const signup = async (data) => {
 
     try {
         const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/signup`, data,{withCredentials:true})
-        console.log(response)
         return response
     } catch (error) {
         console.error(error)
@@ -38,7 +37,6 @@ export const signup = async (data) => {
 export const verifyOtp =async (otp) => {
    try {
         const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/signup/verify`, {otp},{withCredentials:true})
-        console.log(response)
         return response
     } catch (error) {
         console.log(error)

@@ -6,10 +6,9 @@ import User from "../models/User.js"
 import TempToken from "../models/Temp_verification_token.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import Otp from '../models/Otp.js';
 
 
-export async function signup(req, res) {//--> just for otp sending and email saving
+export async function signup(req, res) {//--> just for otp sending and tempToken generation
     const { email, username, fullName, password } = req.body
 
     try {

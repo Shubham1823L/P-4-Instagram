@@ -1,0 +1,16 @@
+.mainLayoutWrapper {
+    display: flex;
+    height: 100%;
+}
+
+.main {
+    flex: 1;
+
+    >* {
+        padding-top: 1.5rem;
+        max-width: 935px;
+        margin: auto;
+        height: 100%;
+        overflow-y: auto;
+    }
+}

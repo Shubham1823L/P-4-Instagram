@@ -1,0 +1,32 @@
+.loadingPageWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+}
+
+.main {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.instaLogo {
+    width: 60px;
+
+}
+
+.footer {
+    padding: 1.5rem;
+
+    p{
+        color: grey;
+        text-align: center;
+    }
+}
+.metaLogo{
+    width: 100px;
+margin: auto;
+}

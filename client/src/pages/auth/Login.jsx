@@ -53,7 +53,7 @@ const Login = () => {
             <main className={loginStyles.hero}>
                 <div className={clsx(styles.formWrapper, loginStyles.formWrapper)}>
                     <form className={styles.form}>
-                        <h1><img src="../../../instagram-wordmark.svg" alt="nameLogo" /></h1>
+                        <h1><img src="instagram-wordmark.svg" alt="nameLogo" /></h1>
 
 
                         <div className={clsx(styles.formFields, loginStyles.formFields)}>

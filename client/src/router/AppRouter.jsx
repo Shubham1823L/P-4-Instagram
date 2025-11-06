@@ -6,6 +6,8 @@ import ProtectedRoutes from './ProtectedRoutes'
 import AntiProtectedRoutes from './AntiProtectedRoutes'
 import Signup from '../pages/auth/Signup'
 import EnterOtp from '../pages/auth/EnterOtp'
+import LoadingPage from '../pages/Extras/LoadingPage'
+import MainLayout from '../layouts/MainLayout'
 
 
 
@@ -13,7 +15,6 @@ export default function AppRouter() {
 
     return (
         <Routes>
-            <Route path='/' element={<Home />} />
 
             <Route element={<AntiProtectedRoutes />} >
                 <Route path='/login' element={<Login />} />
@@ -22,7 +23,10 @@ export default function AppRouter() {
             </Route>
 
             <Route element={<ProtectedRoutes />} >
-                <Route path='/profile' element={<Profile />} />
+                <Route element={<MainLayout />}>
+                    <Route path='/' element={<Home />} />
+                    <Route path='/profile' element={<Profile />} />
+                </Route>
             </Route>
         </Routes>
     )
