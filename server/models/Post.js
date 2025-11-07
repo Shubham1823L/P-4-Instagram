@@ -6,12 +6,14 @@ const postSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
-    text: String,
-    img: {
-        url: String,
-        publicId: String,
+    content: {
+        type: {
+            secureUrl: String,
+            publicId: String,
+        },
+        required: true
     },
-    
+
     likesCount: {
         type: Number,
         default: 0

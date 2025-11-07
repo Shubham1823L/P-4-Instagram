@@ -9,6 +9,7 @@
 :root {
     --clr-neutral-600: hsl(0, 0%, 66%);
     --clr-neutral-700: hsl(212, 10.5%, 15.7%);
+    --clr-neutral-750:hsl(217, 11%, 14%);
     --clr-neutral-800: hsl(0, 0%, 7.1%);
 
     --clr-neutral-700-hover: hsl(212, 10.5%, 25.7%);
@@ -18,6 +19,8 @@
     --clr-border-700: hsl(0, 1.6%, 36.3%);
     --clr-border-800: hsl(0, 1.2%, 25.1%);
     --clr-border-900: hsl(0, 0%, 15.1%);
+
+    --clr-primary-600:hsl(226, 100%, 76%);
 
     --clr-error-600: hsl(355, 100%, 59%);
     --clr-button-600: hsl(233, 93%, 63%);
@@ -45,7 +48,7 @@ canvas {
 
 
 input,
-button,
+button,label,
 a {
     all: unset;
 }

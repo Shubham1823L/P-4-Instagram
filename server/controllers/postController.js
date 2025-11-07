@@ -1,16 +1,20 @@
 import Post from '../models/Post.js'
-import User from '../models/User.js'
 import postCleanupService from '../services/postCleanupService.js'
 
 export const createPost = async (req, res) => {
     const postData = req.body
+    if (!postData) return res.status(404).json({ error: "Nothing received in postData" })
     const user = req.user
     const post = await Post.create({
-        ...postData,
-        author: user._id
+        author: user._id,
+        content: {
+            secureUrl: postData.secureUrl,
+            publicId: postData.publicId
+        }
     })
-    await User.updateOne({ _id: user._id }, { $set: { posts: [...user.posts, post._id] } })
-    res.status(200).json({ message: "New post published" })
+    user.posts.push(post._id)
+    await user.save()
+    res.status(200).json({ post })
 }
 
 export const getPost = async (req, res) => {
@@ -27,7 +31,6 @@ export const getPost = async (req, res) => {
 export const getFeedPosts = async (req, res) => {
     const user = req.user
     const following = user.following
-    console.log(user)
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
 
@@ -72,14 +75,39 @@ export const getFeedPosts = async (req, res) => {
     return res.status(200).json(posts)
 }
 
+export const getMyPosts = async (req, res) => {
+    const user = req.user
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
+    const posts = await Post.aggregate([
+        {
+            $match: { author: user._id }
+        },
+        {
+            $sort: { createdAt: -1 }
+        },
+        {
+            $limit: limit
+        },
+        {
+            $skip: (page - 1) * limit
+        }
+    ])
+
+    return res.status(200).json({ posts })
+}
+
+
+
+
 export const deletePost = async (req, res) => {
     const user = req.user
     const post = await Post.findById(req.params.postId)
 
     if (!post) return res.status(404).json({ error: "Post not found!" })
-    if (post.author != user._id) return res.status(403).json({ error: "Forbidden! Cannot delete posts of other users" })
+    if (post.author.toString() != user._id.toString()) return res.status(403).json({ error: "Forbidden! Cannot delete posts of other users" })
 
-    await postCleanupService(post)
+    await postCleanupService(post,user)
     res.sendStatus(204)
 }
 

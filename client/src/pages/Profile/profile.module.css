@@ -134,9 +134,6 @@
 
 
 /* Below Hero */
-.mainContentWrapper {
-    border: 1px solid aqua;
-}
 
 .mainContentNav {
     border-bottom: .1px solid var(--clr-border-900);
@@ -165,21 +162,65 @@
 
 .mainContent {
     padding-top: .5rem;
+}
+
+
+/* Posts */
+.emptyPostsPlaceholder {
+    display: grid;
+    place-content: center;
+    place-items: center;
+    gap: 1rem;
+    height: 320px;
+
+    .camIconContainer {
+        padding: .2rem;
+        padding-bottom: .3rem;
+        width: 60px;
+        height: 60px;
+        border: 1.5px solid;
+        display: grid;
+        place-content: center;
+        border-radius: 50%;
+    }
+
+    h3 {
+        font-weight: 800;
+        font-size: 1.8rem;
+    }
+
+    p {
+        font-size: 14px;
+        max-width: 40ch;
+        text-align: center;
+    }
+
+    button {
+        color: var(--clr-primary-600);
+        font-size: 14px;
+        font-weight: 600;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.posts {
     display: grid;
     place-content: center;
     grid-template-columns: repeat(3, 1fr);
     gap: .1rem;
     row-gap: 1rem;
-
-    >* {
-        border: .1px solid red;
-        height: 420px;
-        display: grid;
-        place-content: center;
-        background-color: beige;
-        color: black;
-    }
 }
 
+.post {
+    height: 420px;
+    background-color: beige;
+    color: black;
 
-/* Posts */
+    img {
+        object-fit: cover;
+        height: 100%;
+    }
+}

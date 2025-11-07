@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import styles from './profile.module.css'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useOutletContext } from 'react-router-dom'
 import { FaCamera } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { GrGrid } from "react-icons/gr";
@@ -10,6 +10,7 @@ import { TbUserSquare } from "react-icons/tb";
 import clsx from 'clsx';
 
 const Profile = () => {
+    const {myPosts,showCreateNewPostDialog} = useOutletContext()
     const { user: { username, fullName, followersCount, followingCount, posts } } = useAuth()
 
     return (
@@ -88,7 +89,7 @@ const Profile = () => {
 
                     </div>
                     <div className={styles.mainContent}>
-                        <Outlet />
+                        <Outlet context={{myPosts,showCreateNewPostDialog}} />
                     </div>
                 </div>
             </div>

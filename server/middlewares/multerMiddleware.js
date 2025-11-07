@@ -1,6 +1,8 @@
 import multer from 'multer'
 import path from 'path'
 
+
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/')
@@ -12,8 +14,8 @@ const storage = multer.diskStorage({
     }
 })
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) return cb(null, true)
-    return cb(new Error("Only images are allowed"), false)
+    if (file.mimetype.startsWith('image/') || file.mimetype.startWith('video/') ) return cb(null, true)
+    return cb(new Error("Only images and videos are allowed"), false)
 }
 
 const upload = multer({ storage, fileFilter })

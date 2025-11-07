@@ -20,6 +20,7 @@ export const useAxiosInterceptors = () => {
 
     api.interceptors.response.use(res => res, async error => {
         const originalRequest = error.config
+        console.log(error)
 
         // TokenExpiredError is sufficent to say that error.response?.status == 401
         // So if token is expired then we retry by refreshing token ONCE, therefore we add a new key-value pair to the originalRequest i.e. hasRetried , which if is false(undefined), we try otherwise after retrying once , we set it to true therefore if() goes false and we dont retry
@@ -39,7 +40,7 @@ export const useAxiosInterceptors = () => {
             }
 
         }
-        else {
+        else if(error.response?.data.name=="JsonWebTokenError") {
             console.warn("Invalid Session, user must re-login")
         }
 
