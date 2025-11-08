@@ -93,7 +93,7 @@
 
 
 
-.sidebarWrapper:has(.searchBtn:focus-within) {
+.openSearchMenu {
     border: none;
 
     .sidebar {

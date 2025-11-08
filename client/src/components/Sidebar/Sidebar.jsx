@@ -9,13 +9,14 @@ import { FaRegHeart } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { BsPersonCircle } from "react-icons/bs";
 import { IoIosCloseCircle } from "react-icons/io";
-
+import clsx from 'clsx'
 import CreateNewPost from './CreateNewPost';
 import { callApiSearch } from '../../api/userQuery';
 
 const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
     const [searchQuery, setSearchQuery] = useState("")
     const [isOpen, setIsOpen] = useState(false)
+    const searchMenuRef = useRef()
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -45,7 +46,7 @@ const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
 
 
     return (
-        <div className={styles.sidebarWrapper}>
+        <div className={clsx(styles.sidebarWrapper, isOpen ? styles.openSearchMenu : "")}>
 
             <CreateNewPost setMyPosts={setMyPosts} createNewPostRef={createNewPostRef} showCreateNewPostDialog={showCreateNewPostDialog} />
 
@@ -71,7 +72,14 @@ const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
 
 
                     <li className={styles.listItem}>
-                        <button className={styles.searchBtn}>
+                        <button className={styles.searchBtn} onMouseDown={() => {
+
+                            setIsOpen(true)
+                            setTimeout(() => {
+                                searchMenuRef.current.focus()
+                            }, .0001);
+
+                        }}>
                             <div>
                                 <CiSearch strokeWidth={.6} size={28} />
                             </div>
@@ -131,7 +139,10 @@ const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
                 </ul>
                 <div></div>
             </div>
-            <div className={styles.searchMenu}>
+            <div ref={searchMenuRef} tabIndex="-1" className={styles.searchMenu} onBlur={(e) => {
+                if (e.currentTarget.contains(e.relatedTarget)) return
+                setIsOpen(false)
+            }}>
                 <div className={styles.searchHeader}>
                     <h2>Search</h2>
                     <div className={styles.searchBarWrapper}>
