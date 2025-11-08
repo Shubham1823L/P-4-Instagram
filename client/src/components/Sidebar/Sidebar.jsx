@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './sidebar.module.css'
 import { NavLink } from 'react-router-dom'
 import { GoHomeFill } from "react-icons/go";
@@ -8,23 +8,45 @@ import { PiPaperPlaneTiltBold } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { BsPersonCircle } from "react-icons/bs";
+import { IoIosCloseCircle } from "react-icons/io";
 
 import CreateNewPost from './CreateNewPost';
+import { callApiSearch } from '../../api/userQuery';
 
 const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
+    const [searchQuery, setSearchQuery] = useState("")
+    const clearSearchRef = useRef()
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+
+            if (searchQuery) {
+                (async () => {
+                    const response = await callApiSearch(searchQuery,1,5)
+                    if (response.status == 500) return console.log("Server side bad",response)
+                    if (response.status == 200) {
+                        const users = response.data.users
+                        console.log("And the users are:", users)
+                    }
+                })()
+            }
+
+
+        }, 400);
+
+
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [searchQuery])
+
+
+
 
     return (
         <div className={styles.sidebarWrapper}>
 
             <CreateNewPost setMyPosts={setMyPosts} createNewPostRef={createNewPostRef} showCreateNewPostDialog={showCreateNewPostDialog} />
-
-
-            {/* here */}
-            <div className={styles.searchMenuWrapper}>
-                
-            </div>
-
-
 
 
             <div className={styles.sidebar}>
@@ -108,11 +130,28 @@ const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
                 </ul>
                 <div></div>
             </div>
+
+
+            {/* here */}
+
+            <div className={styles.searchMenu}>
+                <div className={styles.searchHeader}>
+                    <h2>Search</h2>
+                    <div className={styles.searchBarWrapper}>
+                        <input onChange={e => setSearchQuery(e.target.value)} value={searchQuery} placeholder='Search' type="text" className={styles.searchBar} />
+                        <IoIosCloseCircle ref={clearSearchRef} size={20} color='#bbb9b9ff' aria-label='clear-search' />
+                    </div>
+                </div>
+            </div>
+
         </div>
     )
 }
 
 export default Sidebar
+
+
+
 
 
 const SidebarNavLink = ({ to, children }) => {

@@ -12,6 +12,7 @@ import postRoutes from './routes/postRoutes.js'
 import postInteractionRoutes from './routes/postInteractionRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 import validationRoutes from './routes/validationRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
 const app = express()
 
@@ -30,6 +31,7 @@ app.use('/api/posts', postRoutes)
 app.use('/api/posts/:id', postInteractionRoutes)
 app.use('/api/upload', uploadRoutes)
 app.use('/api/validate',validationRoutes)
+app.use('/api/users',userRoutes)
 
 
 connectDB()
