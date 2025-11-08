@@ -1,16 +1,17 @@
 .sidebarWrapper {
     padding: 1.5rem .8rem;
     border-right: 1.5px solid var(--clr-border-900);
+    height: 100%;
+    background-color: black;
 
-
-    position: relative;
+    position: fixed;
     z-index: 10;
     display: flex;
 }
 
 .sidebar {
     transition: all .3s ease-in-out;
-    width: 245px;
+    width: 220px;
     font-weight: 700;
     margin-top: 1rem;
     display: flex;
@@ -89,12 +90,20 @@
 }
 
 /* Search Button */
+
+
+
 .sidebarWrapper:has(.searchBtn:focus-within) {
+    border: none;
+
     .sidebar {
         width: calc(80px - 1.6rem);
     }
 
-    border: none;
+
+    .searchMenu {
+        display: flex;
+    }
 
     .listItemText,
     .instaWordmark {
@@ -108,42 +117,119 @@
 
 
 /* Seach Menu */
-
 .searchMenu {
-    padding-inline: 1rem;
+    display: none;
     width: 420px;
+    height: 100%;
+    padding-inline: 1.5rem 0;
+
+    background-color: black;
+
+    flex-direction: column;
+    gap: 1.5rem;
+
+
+
+}
+
+.searchHeader {
+    display: grid;
+    row-gap: 2.5rem;
+
+    h2 {
+        padding-left: .5rem;
+        font-weight: 600;
+    }
 }
 
 .searchBarWrapper {
-    padding: .5em .6em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
     border-radius: 8px;
+    position: relative;
     background-color: var(--clr-neutral-650);
-   
+    color: var(--clr-neutral-600);
 
-    >svg:hover {
-        fill: rgb(223, 222, 222);
-        transition: all .1s linear;
-        scale: 1.05;
+    .svg {
+        position: absolute;
+        top: 50%;
+        translate: 0 -50%;
+
+        &:first-child {
+            pointer-events: none;
+            left: .8rem;
+
+        }
+
+        &:last-child {
+            right: .5rem;
+            display: none;
+        }
+
+        &:last-child:hover {
+            transition: all .1s linear;
+            scale: 1.05;
+
+            >svg {
+                fill: rgb(223, 222, 222);
+            }
+        }
     }
 
+    &:focus-within {
+        .searchBar {
+            padding-inline: 1em 2rem;
+            color: white;
+        }
 
+        .svg {
+            &:first-child {
+                display: none;
+            }
+
+            &:last-child {
+                display: flex;
+                align-items: center;
+            }
+
+        }
+    }
 }
 
 
 .searchBar {
-    flex: 1;
+    box-sizing: border-box;
+    /* ###DOUBT display block won't work */
+    width: 100%;
+    padding: .6em 2.5em;
 
     &::placeholder {
         color: var(--clr-neutral-600);
     }
 }
 
+.searchResultsWrapper {
+    border-top: 1px solid var(--clr-border-800);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.2rem;
 
+    font-size: 14px;
+    font-weight: 600;
+}
 
+.searchResultsHeader {
+    display: flex;
+    justify-content: space-between;
+
+    span {
+        font-size: 1rem;
+    }
+
+    button {
+        color: var(--clr-primary-600);
+
+    }
+}
 
 
 
@@ -277,5 +363,12 @@
 
     &:hover {
         background-color: var(--clr-button-800-focused);
+    }
+}
+
+
+@media (width>1920px) {
+    .sidebar {
+        width: 314px;
     }
 }

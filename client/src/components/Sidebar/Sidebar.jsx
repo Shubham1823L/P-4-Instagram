@@ -15,15 +15,15 @@ import { callApiSearch } from '../../api/userQuery';
 
 const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
     const [searchQuery, setSearchQuery] = useState("")
-    const clearSearchRef = useRef()
+    const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
         const timer = setTimeout(() => {
 
             if (searchQuery) {
                 (async () => {
-                    const response = await callApiSearch(searchQuery,1,5)
-                    if (response.status == 500) return console.log("Server side bad",response)
+                    const response = await callApiSearch(searchQuery, 1, 5)
+                    if (response.status == 500) return console.log("Server side bad", response)
                     if (response.status == 200) {
                         const users = response.data.users
                         console.log("And the users are:", users)
@@ -39,6 +39,7 @@ const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
             clearTimeout(timer)
         }
     }, [searchQuery])
+
 
 
 
@@ -130,20 +131,38 @@ const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
                 </ul>
                 <div></div>
             </div>
-
-
-            {/* here */}
-
             <div className={styles.searchMenu}>
                 <div className={styles.searchHeader}>
                     <h2>Search</h2>
                     <div className={styles.searchBarWrapper}>
+                        <CiSearch size={20} color='#bbb9b9ff' className={styles.svg} />
+
                         <input onChange={e => setSearchQuery(e.target.value)} value={searchQuery} placeholder='Search' type="text" className={styles.searchBar} />
-                        <IoIosCloseCircle ref={clearSearchRef} size={20} color='#bbb9b9ff' aria-label='clear-search' />
+
+                        <button onClick={() => {
+                            setSearchQuery("")
+                            // ###DOUBT why blur won't work
+                            // inputRef.current.blur()
+                        }} className={styles.svg}>
+                            <IoIosCloseCircle size={20} color='#bbb9b9ff' aria-label='clear-search' />
+                        </button>
                     </div>
                 </div>
-            </div>
 
+
+                <div className={styles.searchResultsWrapper}>
+                    <div className={styles.searchResultsHeader}>
+                        <span>Recent</span>
+                        <button>Clear All</button>
+                    </div>
+
+                    <div className={styles.searchResults}>
+
+                    </div>
+                </div>
+
+
+            </div>
         </div>
     )
 }

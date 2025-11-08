@@ -8,7 +8,7 @@
 
 :root {
     --clr-neutral-600: hsl(0, 0%, 66%);
-    --clr-neutral-650: hsl(0, 1%, 16%);
+    --clr-neutral-650: hsl(0, 0%, 21%);
     --clr-neutral-700: hsl(212, 10.5%, 15.7%);
     --clr-neutral-750: hsl(217, 11%, 14%);
     --clr-neutral-800: hsl(0, 0%, 7.1%);
@@ -34,7 +34,7 @@
 
 *,
 *::after,
-*::before {
+*::before{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -61,7 +61,8 @@ ul {
 }
 
 button,
-a,svg {
+a,
+svg {
     cursor: pointer;
 }
 
