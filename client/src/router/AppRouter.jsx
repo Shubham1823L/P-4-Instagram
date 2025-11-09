@@ -6,12 +6,10 @@ import ProtectedRoutes from './ProtectedRoutes'
 import AntiProtectedRoutes from './AntiProtectedRoutes'
 import Signup from '../pages/auth/Signup'
 import EnterOtp from '../pages/auth/EnterOtp'
-import LoadingPage from '../pages/Extras/LoadingPage'
 import MainLayout from '../layouts/MainLayout'
 import Posts from '../pages/Profile/Posts'
 import Saved from '../pages/Profile/Saved'
 import Tagged from '../pages/Profile/Tagged'
-
 
 
 export default function AppRouter() {
@@ -28,7 +26,7 @@ export default function AppRouter() {
             <Route element={<ProtectedRoutes />} >
                 <Route element={<MainLayout />}>
                     <Route path='/' element={<Home />} />
-                    <Route path='/profile' element={<Profile />} >
+                    <Route path='/:username' element={<Profile />} >
                         <Route index element={<Posts />} />
                         <Route path='saved' element={<Saved />} />
                         <Route path='tagged' element={<Tagged />} />

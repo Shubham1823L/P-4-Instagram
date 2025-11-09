@@ -173,6 +173,9 @@
         align-items: center;
         max-width: 50%;
     }
+    .notAdmin{
+        max-width: 30%;
+    }
 }
 
 .navLink {
@@ -251,4 +254,10 @@
         object-fit: cover;
         height: 100%;
     }
+}
+
+
+/* Follow Button */
+.followBtn{
+    
 }

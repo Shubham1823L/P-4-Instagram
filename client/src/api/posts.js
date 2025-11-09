@@ -26,9 +26,9 @@ export const publishNewPost = async (data) => {
 }
 
 
-export const fetchMyPosts = async (page, limit) => {
+export const fetchMyPosts = async (username,page, limit) => {
     try {
-        const response = await api.get(`/posts?page=${page}&limit=${limit}`)
+        const response = await api.get(`/posts/${username}?page=${page}&limit=${limit}`)
         return response
     } catch (error) {
         console.error("An error occurred while retreiving user's posts",{...error.response})

@@ -11,12 +11,14 @@ import { BsPersonCircle } from "react-icons/bs";
 import clsx from 'clsx'
 import CreateNewPost from './CreateNewPost';
 import SearchMenu from './SearchMenu';
+import { useAuth } from '../../hooks/useAuth';
 
 
 const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
 
     const [isOpen, setIsOpen] = useState(false)
     const searchInputRef = useRef()
+    const { user } = useAuth()
 
 
 
@@ -99,7 +101,7 @@ const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
                         </button>
                     </li>
                     <li className={styles.listItem}>
-                        <SidebarNavLink to={"/profile"} >
+                        <SidebarNavLink to={user.username} >
                             <div>
                                 <BsPersonCircle size={28} />
                             </div>

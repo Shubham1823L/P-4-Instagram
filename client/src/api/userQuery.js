@@ -1,7 +1,7 @@
 import { api } from "./axios"
 
 
-export const callApiSearch = async (query,page,limit) => {
+export const callApiSearch = async (query, page, limit) => {
     try {
         const response = await api.get(`/users/${query}?page=${page}&limit=${limit}`)
         return response
@@ -10,4 +10,13 @@ export const callApiSearch = async (query,page,limit) => {
         return error.response
     }
 
+}
+
+export const fetchUserfromAPI = async (username) => {
+    try {
+        const response = await api.get(`/profile/${username}`)
+        return response
+    } catch (error) {
+        return error.response
+    }
 }

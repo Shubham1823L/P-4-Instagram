@@ -6,13 +6,13 @@ import { FiCamera } from "react-icons/fi";
 
 
 const Posts = () => {
-    const {myPosts,showCreateNewPostDialog}= useOutletContext()
+    const { showCreateNewPostDialog, username, isAdmin } = useOutletContext()
     const [allPosts, setAllPosts] = useState([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         (async () => {
-            const { status, data } = await fetchMyPosts(1, 5)
+            const { status, data } = await fetchMyPosts(username, 1, 5)
             if (status == 500) return console.log("Something went wrong on our side getting your posts")
             if (status == 200) {
                 setAllPosts(prevPosts => [...prevPosts, ...data.posts])
@@ -20,10 +20,10 @@ const Posts = () => {
             setLoading(false)
         })()
 
-    }, [])
-    useEffect(() => {
-        myPosts.length != 0 && setAllPosts(prevPosts => [myPosts[myPosts.length - 1], ...prevPosts])
-    }, [myPosts])
+    }, [username])
+    // useEffect(() => {
+    //     myPosts.length != 0 && setAllPosts(prevPosts => [myPosts[myPosts.length - 1], ...prevPosts])
+    // }, [myPosts])
 
 
 
@@ -34,9 +34,14 @@ const Posts = () => {
                 <div className={styles.camIconContainer}>
                     <FiCamera size={36} strokeWidth={.8} />
                 </div>
-                <h3>Share photos</h3>
-                <p>When you share photos, they will appear on your profile.</p>
-                <button onClick={showCreateNewPostDialog}>Share your first photo</button>
+                { isAdmin ?
+                    <>
+                        <h3>Share photos</h3>
+                        <p>When you share photos, they will appear on your profile.</p>
+                        <button onClick={showCreateNewPostDialog}>Share your first photo</button>
+                    </> :
+                    <h3>No posts yet</h3>
+                }
             </div>
                 :
                 <div className={styles.posts}>

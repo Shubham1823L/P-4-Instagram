@@ -5,7 +5,7 @@ const router = express.Router()
 
 router.post('/', verifyAccessToken, createPost)
 
-router.get('/',verifyAccessToken,getMyPosts)
+router.get('/:username',verifyAccessToken,getMyPosts)
 
 router.get('/feed', verifyAccessToken, getFeedPosts)
 

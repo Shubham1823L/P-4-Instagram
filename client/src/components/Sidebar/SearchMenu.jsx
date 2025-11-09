@@ -85,9 +85,9 @@ const SearchMenu = ({setIsOpen,searchInputRef }) => {
 
                                             }
                                             else setRecentUsers(prev => [user, ...prev])
-                                        }} to={"#"} className={styles.searchResult} >
+                                        }} to={user.username} className={styles.searchResult} >
                                             <div>
-                                                <img src={user.avatar?.secureUrl || "vite.svg"} alt="useravatar" />
+                                                <img src={user.avatar?.secureUrl || "defaultAvatar.jpeg"} alt="useravatar" />
                                             </div>
 
                                             <div className={styles.searchedUserData}>
@@ -119,9 +119,9 @@ const SearchMenu = ({setIsOpen,searchInputRef }) => {
                         <div className={clsx(styles.recentResults, styles.searchResults)}>
                             {recentUsers.map(user => {
                                 return (
-                                    <Link key={user._id} to={"#"} className={styles.searchResult} >
+                                    <Link key={user._id} to={user.username} className={styles.searchResult} >
                                         <div>
-                                            <img src={user.avatar?.secureUrl || "vite.svg"} alt="useravatar" />
+                                            <img src={user.avatar?.secureUrl || "defaultAvatar.jpeg"} alt="useravatar" />
                                         </div>
 
                                         <div className={styles.searchedUserData}>

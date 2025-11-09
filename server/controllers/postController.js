@@ -1,5 +1,6 @@
 import Post from '../models/Post.js'
 import postCleanupService from '../services/postCleanupService.js'
+import { findUserByUsername } from '../utils/userUtils.js'
 
 export const createPost = async (req, res) => {
     const postData = req.body
@@ -76,7 +77,14 @@ export const getFeedPosts = async (req, res) => {
 }
 
 export const getMyPosts = async (req, res) => {
-    const user = req.user
+    let user
+    try {
+        user = await findUserByUsername(req.params.username)
+        if (!user) return res.status(404).json({ error: "User not found", code: "USER_NOT_FOUND" })
+    } catch (error) {
+        console.error(error.message)
+        return res.status(500).json({ error: "Error fetching user by username" })
+    }
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
     const posts = await Post.aggregate([
@@ -107,7 +115,7 @@ export const deletePost = async (req, res) => {
     if (!post) return res.status(404).json({ error: "Post not found!" })
     if (post.author.toString() != user._id.toString()) return res.status(403).json({ error: "Forbidden! Cannot delete posts of other users" })
 
-    await postCleanupService(post,user)
+    await postCleanupService(post, user)
     res.sendStatus(204)
 }
 

@@ -24,7 +24,7 @@ const EnterOtp = () => {
         const { user, accessToken } = response.data
         updateToken(accessToken)
         updateUser(user)
-        navigate('/profile', { replace: true })
+        navigate(`${user.username}`, { replace: true })
         //Call otpHandler here
     }
 

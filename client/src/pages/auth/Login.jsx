@@ -40,7 +40,7 @@ const Login = () => {
         const { accessToken, user } = data
         updateToken(accessToken)
         updateUser(user)
-        navigate('/profile', { replace: true })
+        navigate(`${user.username}`, { replace: true })
 
     }
     const handleEmailBlur = () => {
