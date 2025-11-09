@@ -24,7 +24,8 @@ export const getUsers = async (req, res) => {
                 followersCount: 1,
                 _id: 1,
                 username: 1,
-                fullName: 1
+                fullName: 1,
+                profilePic:1,
             }
         }
     ])

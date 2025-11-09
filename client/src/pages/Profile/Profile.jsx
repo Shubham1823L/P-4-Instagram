@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import styles from './profile.module.css'
 import { NavLink, Outlet, useOutletContext } from 'react-router-dom'
@@ -8,10 +8,28 @@ import { GrGrid } from "react-icons/gr";
 import { RiBookmarkLine } from "react-icons/ri";
 import { TbUserSquare } from "react-icons/tb";
 import clsx from 'clsx';
+import { uploadProfilePic } from '../../api/uploadFile';
 
 const Profile = () => {
-    const {myPosts,showCreateNewPostDialog} = useOutletContext()
-    const { user: { username, fullName, followersCount, followingCount, posts } } = useAuth()
+    const [profilePicUrl, setProfilePicUrl] = useState("")
+    const { myPosts, showCreateNewPostDialog } = useOutletContext()
+    const { user: { username, fullName, followersCount, followingCount, posts, profilePic } } = useAuth()
+
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0]
+
+        const { status, data } = await uploadProfilePic(file)
+        if (status == 500) return console.error("Server side shit happened")
+        if (status == 400) return console.error("File not received")
+        if (status == 200) {
+            setProfilePicUrl(data.secureUrl)
+        }
+    }
+
+    useEffect(() => {
+        if (!profilePic.secureUrl) return
+        setProfilePicUrl(profilePic.secureUrl)
+    }, [profilePic])
 
     return (
         <>
@@ -19,10 +37,18 @@ const Profile = () => {
 
                 <div className={styles.hero}>
                     <div className={styles.profile}>
-                        <div className={styles.profilePicWrapper}>
-                            <button className={styles.profilePic}>
-                                <FaCamera size={"2.5rem"} />
-                            </button>
+                        <div className={styles.profilePicArea}>
+                            <div className={styles.profilePicWrapper}>
+                                {!profilePicUrl ? <><img src="profilePhotoPlaceholder.jpeg" alt="profilePicPlaceholder" className={styles.profilePicPlaceholder} />
+                                    <FaCamera size={"2.5rem"} className={styles.profileCamIcon} /></>
+                                    :
+                                    <img src={profilePicUrl} alt="profilePic" className={styles.profilePic} />
+                                }
+                                <label htmlFor="profilePic"></label>
+                                <input onChange={handleFileUpload} type='file' accept='image/*' className={styles.profilePicInput} id='profilePic' style={{ display: "none" }} />
+
+                            </div>
+
                         </div>
                         <div className={styles.profileData}>
                             <div className={styles.profileDataHeader}>
@@ -89,7 +115,7 @@ const Profile = () => {
 
                     </div>
                     <div className={styles.mainContent}>
-                        <Outlet context={{myPosts,showCreateNewPostDialog}} />
+                        <Outlet context={{ myPosts, showCreateNewPostDialog }} />
                     </div>
                 </div>
             </div>

@@ -195,6 +195,7 @@
 }
 
 
+
 .searchBar {
     box-sizing: border-box;
     /* ###DOUBT display block won't work */
@@ -207,19 +208,24 @@
 }
 
 .searchResultsWrapper {
-    border-top: 1px solid var(--clr-border-800);
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    padding: 1.2rem;
 
     font-size: 14px;
     font-weight: 600;
 }
 
+.emptySearchQuery {
+    border-top: 1px solid var(--clr-border-800);
+    padding-block: 1.2rem;
+}
+
 .searchResultsHeader {
     display: flex;
     justify-content: space-between;
+    padding-inline: 1.2rem;
 
     span {
         font-size: 1rem;
@@ -232,12 +238,98 @@
 }
 
 
+.searchResults {
+    display: flex;
+    flex-direction: column;
+}
+
+.searchResult {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    height: 60px;
+    padding: .2rem .6rem;
+    border-radius: 10px;
+    transition: all .15s linear;
+
+
+    &:hover {
+        background-color: var(--clr-neutral-750);
+    }
+
+
+    >div:first-child {
+        border-radius: 50%;
+        overflow: hidden;
+        width: 50px;
+        height: 50px;
+        display: grid;
+        place-content: center;
+        flex-shrink: 0;
+
+    }
+
+    img {
+        object-fit: cover;
+    }
+
+    .oneLineText {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+
+    }
+}
+
+.searchedUserData {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    max-height: 100%;
+    flex: 1;
+
+    .extraUserDetails {
+        display: flex;
+        gap: 1.2rem;
+        color: var(--clr-neutral-600);
+        font-size: 13px;
+        font-weight: 400;
+
+
+        p {
+            max-width: 50%;
+            min-width: fit-content;
+        }
+
+        ul {
+            flex-grow: 1;
+            list-style: disc;
+        }
+
+    }
+}
+
+
+
+.noResults {
+    flex: 1;
+    display: grid;
+    place-content: center;
+    color: var(--clr-neutral-600);
+
+}
+
 
 /* Create New Post */
 .createNewPost {
     position: absolute;
     z-index: 999;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     padding: 1rem;
     backdrop-filter: brightness(0.3);
 

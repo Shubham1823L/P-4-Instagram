@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './sidebar.module.css'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { GoHomeFill } from "react-icons/go";
 import { CiSearch } from "react-icons/ci";
 import { MdOutlineExplore } from "react-icons/md";
@@ -13,10 +13,14 @@ import clsx from 'clsx'
 import CreateNewPost from './CreateNewPost';
 import { callApiSearch } from '../../api/userQuery';
 
+
 const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
+
     const [searchQuery, setSearchQuery] = useState("")
     const [isOpen, setIsOpen] = useState(false)
     const searchMenuRef = useRef()
+    const [searchedUsers, setSearchedUsers] = useState([])
+    const [recentUsers, setRecentUsers] = useState([])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -27,7 +31,7 @@ const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
                     if (response.status == 500) return console.log("Server side bad", response)
                     if (response.status == 200) {
                         const users = response.data.users
-                        console.log("And the users are:", users)
+                        setSearchedUsers(users)
                     }
                 })()
             }
@@ -161,20 +165,96 @@ const Sidebar = ({ setMyPosts, createNewPostRef, showCreateNewPostDialog }) => {
                 </div>
 
 
-                <div className={styles.searchResultsWrapper}>
-                    <div className={styles.searchResultsHeader}>
+                <div className={clsx(styles.searchResultsWrapper, !searchQuery ? styles.emptySearchQuery : "")}>
+                    {!searchQuery && <div className={styles.searchResultsHeader}>
                         <span>Recent</span>
-                        <button>Clear All</button>
-                    </div>
+                        <button onClick={() => setRecentUsers([])}>Clear All</button>
+                    </div>}
 
-                    <div className={styles.searchResults}>
+                    {searchQuery ?
+                        //Search query is not empty
+                        (searchedUsers.length != 0 ?
+                            //Search Results have something to show(not empty)
+                            //Show results
+                            <div className={styles.searchResults}>
+                                {
+                                    searchedUsers.map(user => {
+                                        return (
+                                            <Link key={user._id} onClick={() => {
+                                                if (recentUsers.some(e => e._id == user._id)) {
+                                                    const newUsers = [...recentUsers]
+                                                    const finalUsers = newUsers.filter(e => e._id != user._id)
+                                                    finalUsers.unshift(user)
+                                                    setRecentUsers(finalUsers)
 
-                    </div>
+                                                }
+                                                else setRecentUsers(prev => [user, ...prev])
+                                            }} to={"#"} className={styles.searchResult} >
+                                                <div>
+                                                    <img src={user.profilePic?.secureUrl || "vite.svg"} alt="userProfilePic" />
+                                                </div>
+
+                                                <div className={styles.searchedUserData}>
+                                                    <p className={styles.oneLineText}>{user.username}</p>
+                                                    <div className={styles.extraUserDetails}>
+                                                        <p>{user.fullName}</p>
+                                                        <ul>
+                                                            <li>
+                                                                <span className={styles.oneLineText}>
+                                                                    {user.followersCount} followers
+                                                                </span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        )
+                                    })
+                                }
+
+
+                            </div> :
+                            //Search Results are empty , show no results
+                            <div className={styles.noResults}>No results found.</div>
+                        ) :
+                        //Search query is empty
+                        (recentUsers.length != 0 ?
+                            //Recently Searched Users are there , show them
+                            <div className={clsx(styles.recentResults, styles.searchResults)}>
+                                {recentUsers.map(user => {
+                                    return (
+                                        <Link key={user._id} to={"#"} className={styles.searchResult} >
+                                            <div>
+                                                <img src={user.profilePic?.secureUrl || "vite.svg"} alt="userProfilePic" />
+                                            </div>
+
+                                            <div className={styles.searchedUserData}>
+                                                <p className={styles.oneLineText}>{user.username}</p>
+                                                <div className={styles.extraUserDetails}>
+                                                    <p>{user.fullName}</p>
+                                                    <ul>
+                                                        <li>
+                                                            <span className={styles.oneLineText}>
+                                                                {user.followersCount} followers
+                                                            </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    )
+                                })}
+
+                            </div> :
+                            <div className={styles.noResults}>
+                                No recent searches.
+                            </div>)
+                    }
                 </div>
 
 
             </div>
-        </div>
+        </div >
     )
 }
 

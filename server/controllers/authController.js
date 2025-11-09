@@ -46,7 +46,7 @@ export async function signup(req, res) {//--> just for otp sending and tempToken
             console.error("error finding otp_uuid " + error)
             return res.status(500).json({ error: "error finding otp_uuid " + error })
         }
-
+console.log('here')
         await TempToken.create({ email, password: hashedPassword, username, fullName, otp, otp_uuid })
         res.cookie("email", email, {
             sameSite: "lax",

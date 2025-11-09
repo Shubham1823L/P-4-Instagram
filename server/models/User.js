@@ -11,6 +11,13 @@ const userSchema = new mongoose.Schema({
         type: Number,
         select: false
     },
+    profilePic: {
+        type: {
+            secureUrl: String,
+            publicId: String
+        },
+        default: { secureUrl: "", publicId: "" }
+    },
     password: {
         type: String,
         select: false

@@ -1,11 +1,14 @@
 import express from 'express'
 import upload from '../middlewares/multerMiddleware.js'
-import { uploadPostToCloudinary } from '../controllers/uploadController.js'
+import { uploadFileToCloudinary } from '../controllers/uploadController.js'
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
 
 const router = express.Router()
 
-router.post('/newPost', verifyAccessToken, upload.single('newPost'), uploadPostToCloudinary)
+router.post('/newPost', verifyAccessToken, upload.single('newPost'), uploadFileToCloudinary)
+
+router.post('/profilePic',verifyAccessToken,upload.single('profilePic'),uploadFileToCloudinary)
+
 //inside single() we put the fieldname i.e. name attribute value of form input
 export default router
 
