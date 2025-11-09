@@ -53,7 +53,7 @@ const CreateNewPost = ({createNewPostRef,setMyPosts}) => {
 
                     {tempURL ? <img className={styles.previewContent} src={tempURL} alt="userSelectedContentPreview" /> : <>
                         <section>
-                            <img src="www.instagram.com/image&video.svg" alt="image&videoIcon" />
+                            <img src="/www.instagram.com/image&video.svg" alt="image&videoIcon" />
                             <p>Drag photos and videos here</p>
                             <div className={styles.selectFile}>
                                 <label htmlFor="fileUpload">Select from Computer</label>

@@ -11,10 +11,10 @@ export const api = axios.create({
 
 export const useAxiosInterceptors = () => {
 
-    const {token,updateToken} = useAuth()
-
+    const { token, updateToken } = useAuth()
+    if (!token) return //###DOUBT removing this line of if statement will cause chaos again when AUTHENTICATING , not on subsequent refreshes
     api.interceptors.request.use(config => {
-        config.headers.Authorization = token && `Bearer ${token}`
+        config.headers['authorization'] = token && `Bearer ${token}`
         return config
     })
 
@@ -40,11 +40,11 @@ export const useAxiosInterceptors = () => {
             }
 
         }
-        else if(error.response?.data.name=="JsonWebTokenError") {
+        else if (error.response?.data.name == "JsonWebTokenError") {
             console.warn("Invalid Session, user must re-login")
         }
 
-        return Promise.reject(error)
+        return Promise.reject(error, "double wow")
 
     })
 }

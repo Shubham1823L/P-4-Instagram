@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         select: false
     },
-    profilePic: {
+    avatar: {
         type: {
             secureUrl: String,
             publicId: String

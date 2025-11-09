@@ -9,6 +9,7 @@ const Posts = () => {
     const {myPosts,showCreateNewPostDialog}= useOutletContext()
     const [allPosts, setAllPosts] = useState([])
     const [loading, setLoading] = useState(true)
+
     useEffect(() => {
         (async () => {
             const { status, data } = await fetchMyPosts(1, 5)

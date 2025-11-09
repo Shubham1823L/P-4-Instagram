@@ -12,23 +12,36 @@ import { useAuth } from '../../hooks/useAuth'
 const Login = () => {
     const navigate = useNavigate()
     const { updateToken, updateUser } = useAuth()
+
     const [valid, setValid] = useState({ email: false, password: false })
     const [clickable, setClickable] = useState(false)
+    const [emailError, setEmailError] = useState(null)
+    const [passwordError, setPasswordError] = useState(null)
+
     const emailRef = useRef()
     const passwordRef = useRef()
+
     const handleSubmit = async (e) => {
         e.preventDefault()
+        
+        setEmailError(null)
+        setPasswordError(null)
+
         const email = emailRef.current.value
         const password = passwordRef.current.value
 
-        const data = await login(email, password)
-        if (!data) console.error("login mein error")
+        const { status, data } = await login(email, password)
+        if (status == 500) return console.error("Something went wrong on our end")
+        if (status == 404) return setEmailError("Email not registered, please signup")
+        if (status == 400) return setPasswordError("Incorrect Password")
+
+        //status:200 => OK
+
         const { accessToken, user } = data
         updateToken(accessToken)
         updateUser(user)
         navigate('/profile', { replace: true })
 
-        //Call loginHandler here
     }
     const handleEmailBlur = () => {
         const email = emailRef.current.value
@@ -53,12 +66,12 @@ const Login = () => {
             <main className={loginStyles.hero}>
                 <div className={clsx(styles.formWrapper, loginStyles.formWrapper)}>
                     <form className={styles.form}>
-                        <h1><img src="instagram-wordmark.svg" alt="nameLogo" /></h1>
+                        <h1><img src="/instagram-wordmark.svg" alt="nameLogo" /></h1>
 
 
                         <div className={clsx(styles.formFields, loginStyles.formFields)}>
-                            <TextField type="email" placeholder={"Email address"} ref={emailRef} handleBlur={handleEmailBlur} />
-                            <TextField type={"password"} placeholder={"Password"} ref={passwordRef} handleBlur={handlePasswordBlur} />
+                            <TextField error={emailError} type="email" placeholder={"Email address"} ref={emailRef} handleBlur={handleEmailBlur} />
+                            <TextField error={passwordError} type={"password"} placeholder={"Password"} ref={passwordRef} handleBlur={handlePasswordBlur} />
                         </div>
 
                         <button onClick={handleSubmit} type='submit' className={clsx(!clickable && styles.disabled, styles.btnBase)}>Log in</button>

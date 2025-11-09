@@ -19,9 +19,9 @@ export const uploadFileToCloudinary = async (req, res) => {
 
         const { secure_url, public_id } = result
 
-        if (file.fieldname == "profilePic") {
+        if (file.fieldname == "avatar") {
             try {
-                await User.updateOne({ _id: req.user._id }, { $set: { profilePic: { secureUrl: secure_url, publicId: public_id } } })
+                await User.updateOne({ _id: req.user._id }, { $set: {avatar: { secureUrl: secure_url, publicId: public_id } } })
             } catch (error) {
                 console.log(error, "error user upadte dp")
             }

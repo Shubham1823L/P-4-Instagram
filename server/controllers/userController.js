@@ -25,7 +25,7 @@ export const getUsers = async (req, res) => {
                 _id: 1,
                 username: 1,
                 fullName: 1,
-                profilePic:1,
+                avatar:1,
             }
         }
     ])

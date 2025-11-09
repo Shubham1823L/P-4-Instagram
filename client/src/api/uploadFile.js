@@ -1,13 +1,13 @@
 import { api } from "./axios"
 
-export const uploadProfilePic = async (file) => {
+export const uploadAvatar = async (file) => {
     const formData = new FormData()
-    formData.append('profilePic', file)
+    formData.append('avatar', file)
     try {
-        const response = await api.post('/upload/profilePic', formData)
+        const response = await api.post('/upload/avatar', formData)
         return response
     } catch (error) {
-        console.error('error uploading profilePic')
+        console.error('error uploading avatar')
         return error.response
     }
 }

@@ -19,7 +19,7 @@ export async function signup(req, res) {//--> just for otp sending and tempToken
             if (user) return res.status(409).json({ error: "User already exists", code: "USER_ALREADY_EXISTS" })
             //User must sign in , redirect him to signin page
         } catch (err) {
-            return res.status(500).json({ error: err.details[0].message })
+            return res.status(500).json({ error: err.message })
         }
 
         //User does not exist yet 
@@ -29,7 +29,7 @@ export async function signup(req, res) {//--> just for otp sending and tempToken
             if (user) return res.status(409).json({ error: "Username is taken", code: "USERNAME_IS_TAKEN" })
             // Username is already taken , ask user to select a different one
         } catch (error) {
-            return res.status(500).json({ error: error.details[0].message })
+            return res.status(500).json({ error: error.message })
         }
 
         // Username is available , creating a temporary verification token and sending otp
@@ -46,7 +46,7 @@ export async function signup(req, res) {//--> just for otp sending and tempToken
             console.error("error finding otp_uuid " + error)
             return res.status(500).json({ error: "error finding otp_uuid " + error })
         }
-console.log('here')
+        console.log('here')
         await TempToken.create({ email, password: hashedPassword, username, fullName, otp, otp_uuid })
         res.cookie("email", email, {
             sameSite: "lax",
@@ -83,7 +83,7 @@ export const login = async (req, res) => {
         // => value = true .Therefore try block will be exited and user is authenticated
     } catch (error) {
         console.error("Error comparing password:", error)
-        return res.status(500).json({ error: error.details[0].message })
+        return res.status(500).json({ error: error.message })
     }
 
 
@@ -92,7 +92,7 @@ export const login = async (req, res) => {
         const refreshToken = generateRefreshToken(email)
         res.cookie('refreshToken', refreshToken, env.COOKIE_OPTIONS)
     } catch (error) {
-        return res.status(500).json({ error: error.details[0].message })
+        return res.status(500).json({ error: error.message })
     }
 
     try {
@@ -102,7 +102,7 @@ export const login = async (req, res) => {
             accessToken, user
         })
     } catch (error) {
-        return res.status(500).json({ error: error.details[0].message })
+        return res.status(500).json({ error: error.message })
     }
 
 
@@ -115,12 +115,15 @@ export const logout = async (req, res) => {
 
 export const refreshAccessToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken
-    if (!refreshToken) return res.status(404).json({ error: "Refresh Token NOT FOUND, please re-login" })
+    if (!refreshToken) return res.status(401).json({ error: "Refresh Token NOT FOUND, please re-login", code: "TOKEN_NOT_FOUND" })
     try {
         const decoded = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET)
         const email = decoded.email
         const user = await findUserByEmail(email)
-        if (!user) return res.status(404).json({ error: "User NOT FOUND" })
+        if (!user) {
+            res.clearCookie('refreshToken', env.COOKIE_OPTIONS)
+            res.status(404).json({ error: "User NOT FOUND", code: "USER_NOT_FOUND" })
+        }
         try {
             const accessToken = generateAccessToken(email)
             return res.status(200).json({ message: "New Access Token Generated Successfully", accessToken, user })
@@ -130,9 +133,9 @@ export const refreshAccessToken = async (req, res) => {
         }
     } catch (err) {
         const error = err.name
-        if (error === "TokenExpiredError") return res.status(401).json({ error: error.details[0].message })
-        if (error === "JsonWebTokenError") return res.status(401).json({ error: error.details[0].message })
-        return res.status(500).json({ error: error.details[0].message })
+        if (error === "TokenExpiredError") return res.status(401).json({ error: error.message })
+        if (error === "JsonWebTokenError") return res.status(401).json({ error: error.message })
+        return res.status(500).json({ error: error.message })
     }
 }
 

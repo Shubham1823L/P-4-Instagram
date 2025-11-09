@@ -21,8 +21,10 @@ export const AuthProvider = ({ children }) => {
                 setToken(accessToken)
                 setUser(user)
             } catch (error) {
-                setToken(null)
-                setUser(null)
+                const { status, data } = error.response
+                if (data.code === "TOKEN_NOT_FOUND") return
+                if (status === 500) return console.error("Internal Server Error. Please Retry")
+                if (data.code === "USER_NOT_FOUND") return console.warn("Unauthorized User")
             }
 
 

@@ -29,7 +29,7 @@ export default function AppRouter() {
                 <Route element={<MainLayout />}>
                     <Route path='/' element={<Home />} />
                     <Route path='/profile' element={<Profile />} >
-                        <Route path='' element={<Posts />} />
+                        <Route index element={<Posts />} />
                         <Route path='saved' element={<Saved />} />
                         <Route path='tagged' element={<Tagged />} />
                     </Route>

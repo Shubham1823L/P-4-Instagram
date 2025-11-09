@@ -56,7 +56,7 @@ const Signup = () => {
             <main className={styles.hero}>
                 <div className={styles.formWrapper}>
                     <form className={styles.form}>
-                        <h1><img src="instagram-wordmark.svg" alt="nameLogo" /></h1>
+                        <h1><img src="/instagram-wordmark.svg" alt="nameLogo" /></h1>
                         <h2 className={styles.formHeading}>Sign up to see photos and videos from your friends.</h2>
                         <button className={clsx(styles.btnBase, styles.disabled)}>
                             <ImFacebook2 size={18} /> Log in with Facebook
