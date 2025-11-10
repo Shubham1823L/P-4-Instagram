@@ -13,6 +13,9 @@ const MainLayout = () => {
         createNewPostRef.current.style.display = "flex"
     }
 
+   
+
+
     return (
 
         <>

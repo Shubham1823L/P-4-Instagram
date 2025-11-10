@@ -10,9 +10,12 @@ const Posts = () => {
     const [allPosts, setAllPosts] = useState([])
     const [loading, setLoading] = useState(true)
 
+
+
+
     useEffect(() => {
         (async () => {
-            const { status, data } = await fetchMyPosts(username, 1, 5)
+            const { status, data } = await fetchMyPosts(username, 1, 20)
             if (status == 500) return console.log("Something went wrong on our side getting your posts")
             if (status == 200) {
                 setAllPosts(prevPosts => [...prevPosts, ...data.posts])
@@ -21,11 +24,9 @@ const Posts = () => {
         })()
 
     }, [username])
-    // useEffect(() => {
-    //     myPosts.length != 0 && setAllPosts(prevPosts => [myPosts[myPosts.length - 1], ...prevPosts])
-    // }, [myPosts])
 
 
+   
 
 
     return (
@@ -34,7 +35,7 @@ const Posts = () => {
                 <div className={styles.camIconContainer}>
                     <FiCamera size={36} strokeWidth={.8} />
                 </div>
-                { isAdmin ?
+                {isAdmin ?
                     <>
                         <h3>Share photos</h3>
                         <p>When you share photos, they will appear on your profile.</p>
@@ -44,11 +45,10 @@ const Posts = () => {
                 }
             </div>
                 :
-                <div className={styles.posts}>
+                <div className={styles.posts} >
                     {allPosts.map(e => {
                         return (
                             <div className={styles.post} key={e._id}><img src={e.content?.secureUrl} alt={e._id} /></div>
-
                         )
                     })}
                 </div>}

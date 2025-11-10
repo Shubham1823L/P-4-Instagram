@@ -4,8 +4,13 @@ import { publishNewPost, uploadFile } from '../../api/posts';
 import { IoClose } from "react-icons/io5";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 const CreateNewPost = ({ createNewPostRef, setMyPosts }) => {
+    const navigate = useNavigate()
+    const { user } = useAuth()
+
     const [file, setFile] = useState(null)
     const [tempURL, setTempURL] = useState(null)
     const [uploading, setUploading] = useState(false)
@@ -16,6 +21,7 @@ const CreateNewPost = ({ createNewPostRef, setMyPosts }) => {
         setTempURL(null)
         setUploading(false)
         setUploaded(false)
+        uploaded && navigate(`/${user.username}`)
     }
 
     const handleFileSelect = (e) => {
@@ -47,7 +53,7 @@ const CreateNewPost = ({ createNewPostRef, setMyPosts }) => {
     }
     return (
         <div ref={createNewPostRef} className={styles.createNewPost}>
-            <IoClose onClick={handleClose} className={clsx(styles.closeIcon,uploading && styles.disabled)} size={32} />
+            <IoClose onClick={handleClose} className={clsx(styles.closeIcon, uploading && styles.disabled)} size={32} />
             <div className={styles.dialogBoxWrapper}>
                 <form className={styles.dialogBox}>
                     <div>
