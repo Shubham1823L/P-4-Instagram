@@ -5,7 +5,7 @@ import styles from './profile.module.css'
 
 
 
-const Avatar = ({avatar}) => {
+const Avatar = ({ avatar, isAdmin }) => {
     const [avatarUrl, setavatarUrl] = useState("")
     const handleFileUpload = async (e) => {
         const file = e.target.files[0]
@@ -31,8 +31,10 @@ const Avatar = ({avatar}) => {
                     :
                     <img src={avatarUrl} alt="avatar" className={styles.avatar} />
                 }
-                <label htmlFor="avatar"></label>
-                <input onChange={handleFileUpload} type='file' accept='image/*' className={styles.avatarInput} id='avatar' style={{ display: "none" }} />
+                {isAdmin && <>
+                    <label htmlFor="avatar"></label>
+                    <input onChange={handleFileUpload} type='file' accept='image/*' className={styles.avatarInput} id='avatar' style={{ display: "none" }} />
+                </>}
 
             </div>
         </div>

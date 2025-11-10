@@ -64,7 +64,7 @@ const SearchMenu = ({ setIsOpen, searchInputRef }) => {
 
     useEffect(() => {
         setIsOpen(false)
-        
+
         //call db to refresh recent users' data
 
     }, [clicked])

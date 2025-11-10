@@ -3,15 +3,19 @@ import styles from './sidebar.module.css'
 import { publishNewPost, uploadFile } from '../../api/posts';
 import { IoClose } from "react-icons/io5";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import clsx from 'clsx';
 
-const CreateNewPost = ({createNewPostRef,setMyPosts}) => {
+const CreateNewPost = ({ createNewPostRef, setMyPosts }) => {
     const [file, setFile] = useState(null)
     const [tempURL, setTempURL] = useState(null)
-
+    const [uploading, setUploading] = useState(false)
+    const [uploaded, setUploaded] = useState(false)
 
     const handleClose = () => {
         createNewPostRef.current.style.display = "none"
         setTempURL(null)
+        setUploading(false)
+        setUploaded(false)
     }
 
     const handleFileSelect = (e) => {
@@ -22,7 +26,9 @@ const CreateNewPost = ({createNewPostRef,setMyPosts}) => {
     }
 
     const handleFileUpload = async (e) => {
-        e.preventDefault()
+        e.preventDefault() //consistency reasons, and readability as well
+        setUploading(true)
+        setTempURL(null)
         const { status, data } = await uploadFile(file)
         if (status == 400) return console.log("File was empty, Bad request")
         if (status == 500) return console.log("Something went wrong on our end")
@@ -32,6 +38,8 @@ const CreateNewPost = ({createNewPostRef,setMyPosts}) => {
             if (response.status == 200) {
                 console.log(response)
                 setMyPosts(prev => [...prev, response.data.post])
+                setUploading(false)
+                setUploaded(true)
                 return
             }
         }
@@ -39,7 +47,7 @@ const CreateNewPost = ({createNewPostRef,setMyPosts}) => {
     }
     return (
         <div ref={createNewPostRef} className={styles.createNewPost}>
-            <IoClose onClick={handleClose} className={styles.closeIcon} size={32} />
+            <IoClose onClick={handleClose} className={clsx(styles.closeIcon,uploading && styles.disabled)} size={32} />
             <div className={styles.dialogBoxWrapper}>
                 <form className={styles.dialogBox}>
                     <div>
@@ -47,20 +55,39 @@ const CreateNewPost = ({createNewPostRef,setMyPosts}) => {
                             e.preventDefault()
                             setTempURL(null)
                         }} className={styles.backBtn}><FaArrowLeftLong /></button>}
-                        <p>Create New Post</p>
+                        <p>{uploaded ? "Post shared" : "Create New Post"}</p>
                         {tempURL && <button onClick={handleFileUpload} className={styles.uploadFile}>Share</button>}
                     </div>
 
-                    {tempURL ? <img className={styles.previewContent} src={tempURL} alt="userSelectedContentPreview" /> : <>
-                        <section>
-                            <img src="/www.instagram.com/image&video.svg" alt="image&videoIcon" />
-                            <p>Drag photos and videos here</p>
-                            <div className={styles.selectFile}>
-                                <label htmlFor="fileUpload">Select from Computer</label>
-                                <input onChange={handleFileSelect} id='fileUpload' type="file" accept='image/* video/*' />
-                            </div>
-                        </section>
-                    </>
+                    {tempURL ?
+                        //we have tempURL so show the preview
+                        <img className={styles.previewContent} src={tempURL} alt="userSelectedContentPreview" /> :
+                        //no tempURL , 2 cases, either uploading (selected image) or not (user hasn't selected the image yet)
+                        uploading || uploaded ?
+                            //Show Loading page
+                            <>
+                                <section className={styles.uploadingStateSection}>
+                                    <div className={clsx(styles.uploadingLoaderCircle, uploading && styles.loading)}>
+                                        <div className={clsx(styles.tickMarkWrapper, uploading && styles.reverseLoading)}>
+                                            {uploaded && <div className={clsx(styles.tickMark, uploaded && styles.tickMarkLeftAnimation, uploaded && styles.tickMarkRightAnimation)}></div>}
+                                        </div>
+                                    </div>
+                                    <p style={{
+                                        opacity: uploaded && 1,
+                                        translate: uploaded && "none"
+                                    }}>Your post has been shared.</p>
+                                </section>
+                            </> :
+                            <>
+                                <section className={styles.postUploadPlaceholder}>
+                                    <img src="/www.instagram.com/image&video.svg" alt="image&videoIcon" />
+                                    <p>Drag photos and videos here</p>
+                                    <div className={styles.selectFile}>
+                                        <label htmlFor="fileUpload">Select from Computer</label>
+                                        <input onChange={handleFileSelect} id='fileUpload' type="file" accept='image/* video/*' />
+                                    </div>
+                                </section>
+                            </>
                     }
 
                 </form>

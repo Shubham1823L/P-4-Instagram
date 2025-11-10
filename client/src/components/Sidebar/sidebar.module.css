@@ -9,6 +9,17 @@
     display: flex;
 }
 
+@keyframes loadingCircleAnimation {
+    from {
+        rotate: 0deg;
+    }
+
+    to {
+        rotate: 360deg;
+    }
+}
+
+
 .sidebar {
     transition: all .3s ease-in-out;
     width: 220px;
@@ -349,6 +360,10 @@
         }
     }
 
+    .disabled {
+        pointer-events: none;
+    }
+
     .dialogBoxWrapper {
         flex-grow: 1;
         display: grid;
@@ -366,12 +381,12 @@
 
 
 
+
         >div {
             font-weight: 600;
             background-color: black;
             padding: .5em 1.5em;
             border-bottom: .1px solid var(--clr-border-800);
-
 
             display: flex;
             justify-content: space-between;
@@ -396,18 +411,23 @@
             color: var(--clr-primary-600);
             font-size: 14px;
             justify-content: end;
+
+            &:hover {
+                text-decoration: underline;
+                color: var(--clr-primary-500);
+            }
         }
 
 
         .previewContent {
             flex-grow: 1;
+
             /* ###Come back here and make it better for diff aspect ratios */
             object-fit: cover;
             width: 100%;
             background-color: var(--clr-neutral-800);
-
-
         }
+
 
         >section {
             flex-grow: 1;
@@ -417,8 +437,9 @@
             gap: 1rem;
             background-color: var(--clr-neutral-750);
             padding: 2rem;
+        }
 
-
+        .postUploadPlaceholder {
             >img {
                 width: 100px;
             }
@@ -428,8 +449,121 @@
                 margin-bottom: .2rem;
             }
         }
+
+
+        .uploadingStateSection>p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            opacity: 0;
+            translate: 0 100%;
+            transition: all .3s ease-out;
+        }
+
+        .uploadingLoaderCircle {
+            width: 95px;
+            height: 95px;
+            display: grid;
+            place-content: center;
+            border-radius: 50%;
+            background: #FEDA75;
+            background: linear-gradient(135deg, rgba(254, 218, 117, 1) 10%, rgba(250, 126, 30, 1) 25%, rgba(214, 41, 118, 1) 60%, rgba(150, 47, 191, 1) 80%, rgba(79, 91, 213, 1) 100%);
+            position: relative;
+
+
+
+        }
+
+        .tickMarkWrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            translate: -50% -50%;
+
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            background-color: var(--clr-neutral-750);
+
+            display: grid;
+            place-content: center;
+        }
+
+        .loading {
+            animation: loadingCircleAnimation .5s linear infinite;
+        }
+
+        .reverseLoading {
+            animation: loadingCircleAnimation .5s linear infinite reverse;
+        }
+
+        .tickMark {
+            width: 25px;
+            height: 45px;
+            rotate: 45deg;
+            overflow: hidden;
+            position: relative;
+            bottom: 7px;
+
+        }
+
+
+        .tickMark::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            bottom: -94%;
+            background: #FA7E1E;
+            background: linear-gradient(90deg, rgba(250, 126, 30, 1) 0%, rgba(214, 41, 118, 1) 55%);
+        }
+
+        .tickMark::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            right: -89%;
+            background: #FA7E1E;
+            background: linear-gradient(0deg, rgba(250, 126, 30, 1) 0%, rgba(214, 41, 118, 1) 0%);
+        }
+
+        .tickMarkLeftAnimation::before {
+            animation: tickMarkLeft 3s ease-in-out infinite;
+        }
+
+        .tickMarkRightAnimation::after {
+            animation: tickMarkRight 3s ease-in-out infinite;
+        }
     }
 }
+
+@keyframes tickMarkLeft {
+    0% {
+        left: -100%;
+    }
+
+    10% {
+        left: 0%;
+    }
+
+}
+
+@keyframes tickMarkRight {
+    0% {
+        bottom: -100%;
+    }
+
+    10% {
+        bottom: -100%;
+    }
+
+    20% {
+        bottom: 0%;
+    }
+}
+
 
 .selectFile {
     color: white;

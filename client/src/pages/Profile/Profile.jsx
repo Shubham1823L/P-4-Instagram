@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './profile.module.css'
 import { NavLink, Outlet, useOutletContext, useParams } from 'react-router-dom'
 import { FiPlus } from "react-icons/fi";
@@ -56,11 +56,11 @@ const Profile = () => {
 
     return (
         <>
-            {loading ? <LoadingBar loading={loading}/> : <div className={styles.wrapper}>
+            {loading ? <LoadingPage /> : <div className={styles.wrapper}>
 
                 <div className={styles.hero}>
                     <div className={styles.profile}>
-                        <Avatar avatar={user.avatar} />
+                        <Avatar isAdmin={isAdmin} avatar={user.avatar} />
                         <div className={styles.profileData}>
                             <div className={styles.profileDataHeader}>
                                 <span>{user.username}</span>
