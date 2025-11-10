@@ -7,11 +7,13 @@ import { Link } from 'react-router-dom'
 import { CiSearch } from "react-icons/ci";
 
 
-const SearchMenu = ({setIsOpen,searchInputRef }) => {
+const SearchMenu = ({ setIsOpen, searchInputRef }) => {
     const searchMenuRef = useRef()
-    const [recentUsers, setRecentUsers] = useState([])
+    const [recentUsers, setRecentUsers] = useState(JSON.parse(localStorage.getItem('recentUsers')) || [])
     const [searchedUsers, setSearchedUsers] = useState([])
     const [searchQuery, setSearchQuery] = useState("")
+    const [clicked, setClicked] = useState(false)
+
 
 
     useEffect(() => {
@@ -36,6 +38,36 @@ const SearchMenu = ({setIsOpen,searchInputRef }) => {
             clearTimeout(timer)
         }
     }, [searchQuery])
+
+    const updateRecentUsersList = (user) => {
+
+        setClicked(!clicked)
+        if (recentUsers.some(e => e._id == user._id)) {
+            const newUsers = [...recentUsers]
+            const finalUsers = newUsers.filter(e => e._id != user._id)
+
+            finalUsers.unshift(user)
+            //###DOUBT won't work if i don't copy finalUsers and just setState(finalUsers) DIRECTLY. ISSUE HAPPENS, ONLY FOR RECENT LIST CLICKING not normal search list clicks
+            setRecentUsers([...finalUsers])
+            localStorage.setItem('recentUsers', JSON.stringify(finalUsers.splice(0, 15)))
+
+
+
+
+
+        }
+        else {
+            setRecentUsers(prev => [user, ...prev].splice(0, 15))
+            localStorage.setItem('recentUsers', JSON.stringify([user, ...recentUsers].splice(0, 15)))
+        }
+    }
+
+    useEffect(() => {
+        setIsOpen(false)
+        
+        //call db to refresh recent users' data
+
+    }, [clicked])
 
 
     return (
@@ -64,7 +96,10 @@ const SearchMenu = ({setIsOpen,searchInputRef }) => {
             <div className={clsx(styles.searchResultsWrapper, !searchQuery ? styles.emptySearchQuery : "")}>
                 {!searchQuery && <div className={styles.searchResultsHeader}>
                     <span>Recent</span>
-                    <button onClick={() => setRecentUsers([])}>Clear All</button>
+                    <button onClick={() => {
+                        localStorage.setItem('recentUsers', JSON.stringify([]))
+                        setRecentUsers([])
+                    }}>Clear All</button>
                 </div>}
 
                 {searchQuery ?
@@ -76,16 +111,7 @@ const SearchMenu = ({setIsOpen,searchInputRef }) => {
                             {
                                 searchedUsers.map(user => {
                                     return (
-                                        <Link key={user._id} onClick={() => {
-                                            if (recentUsers.some(e => e._id == user._id)) {
-                                                const newUsers = [...recentUsers]
-                                                const finalUsers = newUsers.filter(e => e._id != user._id)
-                                                finalUsers.unshift(user)
-                                                setRecentUsers(finalUsers)
-
-                                            }
-                                            else setRecentUsers(prev => [user, ...prev])
-                                        }} to={user.username} className={styles.searchResult} >
+                                        <Link key={user._id} onClick={() => updateRecentUsersList(user)} to={user.username} className={styles.searchResult} >
                                             <div>
                                                 <img src={user.avatar?.secureUrl || "defaultAvatar.jpeg"} alt="useravatar" />
                                             </div>
@@ -119,7 +145,7 @@ const SearchMenu = ({setIsOpen,searchInputRef }) => {
                         <div className={clsx(styles.recentResults, styles.searchResults)}>
                             {recentUsers.map(user => {
                                 return (
-                                    <Link key={user._id} to={user.username} className={styles.searchResult} >
+                                    <Link onClick={() => updateRecentUsersList(user)} key={user._id} to={user.username} className={styles.searchResult} >
                                         <div>
                                             <img src={user.avatar?.secureUrl || "defaultAvatar.jpeg"} alt="useravatar" />
                                         </div>

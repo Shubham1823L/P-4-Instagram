@@ -51,7 +51,8 @@
     padding: 3.3rem;
     pointer-events: none;
 }
-.avatar{
+
+.avatar {
     object-fit: cover;
     width: 100%;
     height: 100%;
@@ -173,7 +174,8 @@
         align-items: center;
         max-width: 50%;
     }
-    .notAdmin{
+
+    .notAdmin {
         max-width: 30%;
     }
 }
@@ -258,6 +260,9 @@
 
 
 /* Follow Button */
-.followBtn{
-    
+.followBtn {
+    background-color: var(--clr-button-600);
+    &:hover{
+        background-color: var(--clr-button-900-focused);
+    }
 }

@@ -2,16 +2,21 @@ import React from 'react'
 import styles from './profile.module.css'
 import clsx from 'clsx'
 import { apiToggleFollowUser } from '../../api/follow.api'
+import { useAuth } from '../../hooks/useAuth'
 
-const FollowBtn = ({ username, isFollowing, setIsFollowing }) => {
-
+const FollowBtn = ({ username, isFollowing, setIsFollowing, setFollowersCount }) => {
+    const { updateUser } = useAuth()
     const toggleFollow = async () => {
         //Call ToggleFollowRoute
         const { status, data } = await apiToggleFollowUser(username, isFollowing)
-        console.log(status)
+
         if (status == 200) {
+            const increment = isFollowing ? -1 : 1
+            setFollowersCount(count => count + increment)
             setIsFollowing(bool => !bool)
-            console.log(data.message)
+            //Syncing user for frontend
+            updateUser(data.user)
+
             return
         }
 
@@ -20,7 +25,7 @@ const FollowBtn = ({ username, isFollowing, setIsFollowing }) => {
     }
 
     return (
-        <button onClick={toggleFollow} className={clsx(styles.followBtn, styles.darkBtnBase)}>
+        <button onClick={toggleFollow} className={clsx(!isFollowing ? styles.followBtn : "", styles.darkBtnBase)}>
             {isFollowing ? "Following" : "Follow"}
         </button>
     )

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styles from './profile.module.css'
 import { NavLink, Outlet, useOutletContext, useParams } from 'react-router-dom'
 import { FiPlus } from "react-icons/fi";
@@ -10,6 +10,7 @@ import Avatar from './Avatar';
 import { fetchUserfromAPI } from '../../api/userQuery';
 import { useAuth } from '../../hooks/useAuth';
 import LoadingPage from '../Extras/LoadingPage';
+import LoadingBar from '../Extras/LoadingBar';
 import FollowBtn from './FollowBtn';
 
 
@@ -19,28 +20,33 @@ const Profile = () => {
     const [loading, setLoading] = useState(true)
     const [isFollowing, setIsFollowing] = useState(false)
 
+    const [followersCount, setFollowersCount] = useState(500)
+
     const [user, setUser] = useState({})
     const [isAdmin, setIsAdmin] = useState(false)
     const currentUser = useAuth().user
+
 
     useEffect(() => {
         setLoading(true);
 
         (async () => {
-
             const { status, data } = await fetchUserfromAPI(params.username)
             if (status != 200) return console.error("error", data)
 
             const user = data.user
             setUser(user)
 
-            //Sync isFollowing
+            //Sync initial followersCount value
+            setFollowersCount(user.followersCount)
+
+            //Sync initial isFollowing value
             if (currentUser.username == user.username) return //no need to check if user is following himself
-            console.log(typeof currentUser.following[0], typeof user._id)
             if (currentUser.following.some(id => id == user._id)) return setIsFollowing(true)
 
+            //###DOUBT currentUser causes refetching 
         })().then(() => setLoading(false))
-    }, [params, myPosts, currentUser])
+    }, [params.username, myPosts, currentUser.username])
 
     useEffect(() => {
         if (currentUser.username == params.username) setIsAdmin(true)
@@ -50,7 +56,7 @@ const Profile = () => {
 
     return (
         <>
-            {loading ? <LoadingPage /> : <div className={styles.wrapper}>
+            {loading ? <LoadingBar loading={loading}/> : <div className={styles.wrapper}>
 
                 <div className={styles.hero}>
                     <div className={styles.profile}>
@@ -62,7 +68,7 @@ const Profile = () => {
                                     {isAdmin ? <button className={styles.darkBtnBase}>
                                         Edit Profile
                                     </button> :
-                                        <FollowBtn username={user.username} isFollowing={isFollowing} setIsFollowing={setIsFollowing} />
+                                        <FollowBtn setFollowersCount={setFollowersCount} username={user.username} isFollowing={isFollowing} setIsFollowing={setIsFollowing} />
                                     }
                                     <button className={styles.darkBtnBase}>
                                         View Archive
@@ -78,8 +84,8 @@ const Profile = () => {
                                     <span>{user.posts.length > 1 ? "posts" : "post"}</span>
                                 </span>
                                 <span>
-                                    <span>{user.followersCount}</span>
-                                    <span>{user.followersCount > 1 ? "followers" : "follower"}</span>
+                                    <span>{followersCount}</span>
+                                    <span>{followersCount > 1 ? "followers" : "follower"}</span>
                                 </span>
                                 <span>
                                     <span>{user.followingCount}</span>
