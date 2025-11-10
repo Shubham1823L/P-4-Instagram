@@ -1,19 +1,21 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './mainLayout.module.css'
 import Sidebar from '../components/Sidebar/Sidebar'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 import Footer from "../components/Footer/Footer"
 import LoadingBar from '../pages/Extras/LoadingBar'
+import clsx from 'clsx'
 
 const MainLayout = () => {
+    const params = useParams()
     const [myPosts, setMyPosts] = useState([])
     const createNewPostRef = useRef()
 
     const showCreateNewPostDialog = () => {
         createNewPostRef.current.style.display = "flex"
     }
+    
 
-   
 
 
     return (
@@ -21,8 +23,8 @@ const MainLayout = () => {
         <>
             <div className={styles.mainLayoutWrapper}>
                 <Sidebar setMyPosts={setMyPosts} createNewPostRef={createNewPostRef} showCreateNewPostDialog={showCreateNewPostDialog} />
-                <main className={styles.main}>
-                    <Outlet context={{myPosts,showCreateNewPostDialog}} />
+                <main className={clsx(styles.main,params.username && styles.smallChildrenWidth)}>
+                    <Outlet context={{ myPosts, showCreateNewPostDialog }} />
                     <Footer />
                 </main>
             </div>

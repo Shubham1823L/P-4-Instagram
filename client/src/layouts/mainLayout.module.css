@@ -8,16 +8,21 @@
     height: 100%;
     overflow-y: auto;
 
-
-    >*:first-child {
+    >* {
         padding-top: 1.5rem;
-        max-width: 935px;
         margin: auto;
+        max-width: 990px;
     }
 }
 
-@media(width>1920px){
-    .main{
+.smallChildrenWidth>*:first-child {
+    max-width: 935px;
+}
+
+
+
+@media(width>1920px) {
+    .main {
         width: calc(100% - 314px - 1.6rem);
     }
 }
