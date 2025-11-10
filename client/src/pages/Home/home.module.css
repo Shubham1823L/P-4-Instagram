@@ -79,6 +79,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
 }
 
 .post {
@@ -108,7 +110,11 @@
     }
 
     img {
-        width: 25px;
+        width: 35px;
+        height: 35px;
+        object-fit: cover;
+        object-position: center center;
+        border-radius: 50%;
     }
 
     span {
@@ -135,10 +141,10 @@
     border-radius: 8px;
     overflow: hidden;
 
-
 }
 
 .postContent {
+    height: 585px;
     object-fit: cover;
 }
 

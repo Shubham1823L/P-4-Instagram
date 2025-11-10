@@ -4,7 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 const AntiProtectedRoutes = () => {
     const { user } = useAuth()
-    return user ? <Navigate to="/profile" /> : <Outlet />
+    return user ? <Navigate to={`${user.username}`} /> : <Outlet />
 }
 
 export default AntiProtectedRoutes

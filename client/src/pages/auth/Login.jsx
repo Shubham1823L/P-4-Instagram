@@ -23,7 +23,7 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        
+
         setEmailError(null)
         setPasswordError(null)
 
@@ -40,7 +40,8 @@ const Login = () => {
         const { accessToken, user } = data
         updateToken(accessToken)
         updateUser(user)
-        navigate(`${user.username}`, { replace: true })
+        console.log(user.username)
+        navigate(`/${user.username}`, { replace: true })
 
     }
     const handleEmailBlur = () => {

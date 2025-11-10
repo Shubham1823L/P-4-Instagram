@@ -35,3 +35,14 @@ export const fetchMyPosts = async (username,page, limit) => {
         return error.response
     }
 }
+
+export const apiFetchFeed = async (page,limit) => {
+    try {
+        const response = await api.get(`/posts/feed?page=${page}&limit=${limit}`)
+        return response
+    } catch (error) {
+        console.error("An error occured while trying to fetch user's feed")
+        return error.response
+    }
+}
+
