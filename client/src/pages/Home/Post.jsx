@@ -1,21 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import styles from './home.module.css'
-import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { MessageCircle, Send, Bookmark, Ellipsis } from 'lucide-react'
 import LikeButton from '../../components/Buttons/LikeButton';
 import { useAuth } from '../../hooks/useAuth';
+import CommentSection from './CommentSection';
+
 
 const Post = ({ post }) => {
     const { user } = useAuth()
     const [isLiked, setIsLiked] = useState(post.likes.some(id => id == user._id))
     const [likesCount, setLikesCount] = useState(post.likesCount)
-    const [comment, setComment] = useState("")
-
-    const handleComment = (e) => {
-        setComment(e.target.value)
-    }
-
-
 
 
 
@@ -68,18 +62,11 @@ const Post = ({ post }) => {
                     View all {post.commentsCount} comments
                 </button>
 
-                <div className={styles.commentInputWrapper}>
-                    <input value={comment} onChange={handleComment} placeholder='Add a comment...' type="text" className={styles.commentInput} />
-                    {comment && <button className={styles.postBtn}>
-                        Post
-                    </button>}
-                    <button className={styles.emojiBtn}>
-                        <HiOutlineEmojiHappy size={18} color='#A8A8A8' />
-                    </button>
-                </div>
+                <CommentSection postId={post._id} />
+
             </div>
 
-        </article>
+        </article >
     )
 }
 

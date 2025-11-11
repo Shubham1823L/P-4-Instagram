@@ -6,7 +6,17 @@ export const apiToggleLike = async (postId) => {
         const response = await api.post(`/postInteractions/${postId}/like`)
         return response
     } catch (error) {
-        logger(error,"Error toggling like")
+        logger(error, "Error toggling like")
+        return error.response
+    }
+}
+
+export const apiCreateComment = async (postId, comment) => {
+    try {
+        const response = await api.post(`/postInteractions/${postId}/comment`, { text: comment })
+        return response
+    } catch (error) {
+        logger(error, "Error commenting, comment was:", comment, postId)
         return error.response
     }
 }

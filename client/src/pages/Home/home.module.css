@@ -164,10 +164,17 @@
 
     >button:last-child {
         margin-left: auto;
+
+        &:hover {
+            scale: 1.05;
+        }
     }
 
 }
 
+.saved>svg {
+    fill: white
+}
 
 
 
@@ -192,6 +199,21 @@
     color: var(--clr-neutral-600);
 }
 
+.myRecentComments {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}
+
+.myRecentComment {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+
+    >span:first-child {
+        font-weight: 600;
+    }
+}
 
 .commentInputWrapper {
     display: flex;

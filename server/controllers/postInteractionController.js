@@ -33,7 +33,7 @@ export const createComment = async (req, res) => {
         post.comments.push(comment._id)
         post.commentsCount++
         await post.save()
-        return res.status(201).json({ message: "Comment Posted" })
+        return res.status(201).json({ message: "Comment Posted", comment: { text, _id: comment._id } })
     } catch (error) {
         return res.status(500).json({ error })
     }
