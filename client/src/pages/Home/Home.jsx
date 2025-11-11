@@ -7,7 +7,7 @@ import { apiFetchFeed } from '../../api/posts';
 
 const Home = () => {
   const [posts, setPosts] = useState([])
-  
+
   //fetchUserFeed
   useEffect(() => {
     (async () => {
@@ -15,7 +15,6 @@ const Home = () => {
       if (status == 500) return console.error("Server side error, please be patient")
       if (status == 401) return console.error("Unauthorized")
       if (status == 200) {
-        console.log(data)
         setPosts(data)
         return
       }

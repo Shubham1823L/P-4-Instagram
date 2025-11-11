@@ -68,6 +68,7 @@ export const getFeedPosts = async (req, res) => {
                     createdAt: 1,
                     content:1,
                     commentsCount: 1,
+                    likes:1,
                     author: {
                         username: 1,
                         followersCount: 1,

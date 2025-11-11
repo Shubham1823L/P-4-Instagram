@@ -1,15 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styles from './home.module.css'
 import { HiOutlineEmojiHappy } from "react-icons/hi";
-import { MessageCircle, Send, Bookmark, Heart, Ellipsis } from 'lucide-react'
+import { MessageCircle, Send, Bookmark, Ellipsis } from 'lucide-react'
+import LikeButton from '../../components/Buttons/LikeButton';
+import { useAuth } from '../../hooks/useAuth';
 
 const Post = ({ post }) => {
-
+    const { user } = useAuth()
+    const [isLiked, setIsLiked] = useState(post.likes.some(id => id == user._id))
+    const [likesCount, setLikesCount] = useState(post.likesCount)
     const [comment, setComment] = useState("")
 
     const handleComment = (e) => {
         setComment(e.target.value)
     }
+
+
+
+
 
     return (
         <article className={styles.post}>
@@ -28,9 +36,7 @@ const Post = ({ post }) => {
             <div className={styles.postBottom}>
 
                 <div className={styles.postInteractions}>
-                    <button>
-                        <Heart size={28} />
-                    </button>
+                    <LikeButton postId={post._id} isLiked={isLiked} setisLiked={setIsLiked} setLikesCount={setLikesCount} />
                     <button className={styles.commentBtn}>
                         <MessageCircle />
                     </button>
@@ -42,7 +48,7 @@ const Post = ({ post }) => {
                     </button>
                 </div>
 
-                <span className={styles.likesCount}>{post.likesCount} likes</span>
+                <span className={styles.likesCount}>{likesCount} {likesCount > 1 ? "likes" : "like"}</span>
 
                 {/* ###COMEBACK LATER Tricky description , deal later */}
                 <p className={styles.postDescription}>
