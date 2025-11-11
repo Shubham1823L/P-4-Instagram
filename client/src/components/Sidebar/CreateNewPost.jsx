@@ -42,7 +42,6 @@ const CreateNewPost = ({ createNewPostRef, setMyPosts }) => {
             const response = await publishNewPost(data)
             if (response.status == 500) return console.log("Something went wrong on our end")
             if (response.status == 200) {
-                console.log(response)
                 setMyPosts(prev => [...prev, response.data.post])
                 setUploading(false)
                 setUploaded(true)

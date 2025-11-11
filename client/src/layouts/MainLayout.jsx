@@ -3,7 +3,6 @@ import styles from './mainLayout.module.css'
 import Sidebar from '../components/Sidebar/Sidebar'
 import { Outlet, useParams } from 'react-router-dom'
 import Footer from "../components/Footer/Footer"
-import LoadingBar from '../pages/Extras/LoadingBar'
 import clsx from 'clsx'
 
 const MainLayout = () => {

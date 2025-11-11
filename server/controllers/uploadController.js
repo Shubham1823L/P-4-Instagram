@@ -2,6 +2,15 @@ import cloudinary from '../config/cloudinary.js'
 import fs from 'fs'
 import User from '../models/User.js'
 
+export const checkUploadsExists = async (req, res, next) => {
+    if (fs.existsSync('uploads')) return next()
+    fs.mkdirSync('uploads')
+    console.log("uploads folder was created") 
+    next()
+}
+
+
+
 export const uploadFileToCloudinary = async (req, res) => {
     const file = req.file
     if (!file) return res.status(400).json({ error: "File not found" })
@@ -21,7 +30,7 @@ export const uploadFileToCloudinary = async (req, res) => {
 
         if (file.fieldname == "avatar") {
             try {
-                await User.updateOne({ _id: req.user._id }, { $set: {avatar: { secureUrl: secure_url, publicId: public_id } } })
+                await User.updateOne({ _id: req.user._id }, { $set: { avatar: { secureUrl: secure_url, publicId: public_id } } })
             } catch (error) {
                 console.log(error, "error user upadte dp")
             }

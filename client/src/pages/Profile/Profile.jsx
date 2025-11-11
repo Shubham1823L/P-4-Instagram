@@ -10,7 +10,6 @@ import Avatar from './Avatar';
 import { fetchUserfromAPI } from '../../api/userQuery';
 import { useAuth } from '../../hooks/useAuth';
 import LoadingPage from '../Extras/LoadingPage';
-import LoadingBar from '../Extras/LoadingBar';
 import FollowBtn from './FollowBtn';
 
 

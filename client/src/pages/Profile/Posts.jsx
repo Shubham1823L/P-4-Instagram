@@ -3,13 +3,13 @@ import styles from './profile.module.css'
 import { useOutletContext } from 'react-router-dom'
 import { fetchMyPosts } from '../../api/posts'
 import { FiCamera } from "react-icons/fi";
+import { MessageCircle } from 'lucide-react'
 
 
 const Posts = () => {
     const { showCreateNewPostDialog, username, isAdmin } = useOutletContext()
     const [allPosts, setAllPosts] = useState([])
     const [loading, setLoading] = useState(true)
-
 
 
 
@@ -25,8 +25,6 @@ const Posts = () => {
 
     }, [username])
 
-
-   
 
 
     return (
@@ -46,9 +44,15 @@ const Posts = () => {
             </div>
                 :
                 <div className={styles.posts} >
-                    {allPosts.map(e => {
+                    {allPosts.map(post => {
                         return (
-                            <div className={styles.post} key={e._id}><img src={e.content?.secureUrl} alt={e._id} /></div>
+                            <div className={styles.post} key={post._id}>
+                                <div className={styles.postCommentsPreview}>
+                                    <MessageCircle />
+                                    {post.commentsCount}
+                                </div>
+                                <img src={post.content.secureUrl} alt={post._id} />
+                            </div>
                         )
                     })}
                 </div>}
