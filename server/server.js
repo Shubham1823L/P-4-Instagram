@@ -13,6 +13,8 @@ import postInteractionRoutes from './routes/postInteractionRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 import validationRoutes from './routes/validationRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import errorHandler from './middlewares/errorHandler.js'
+import responseHandler from './middlewares/responseHandler.js'
 
 const app = express()
 
@@ -24,6 +26,8 @@ app.use(cors({
     credentials: true
 }))
 
+app.use(responseHandler)
+
 app.use('/api/auth', authRoutes)
 app.use('/api/profile', profileRoutes)
 app.use('/api', followRoutes)
@@ -33,6 +37,7 @@ app.use('/api/upload', uploadRoutes)
 app.use('/api/validate',validationRoutes)
 app.use('/api/users',userRoutes)
 
+app.use(errorHandler)
 
 connectDB()
 app.listen(env.PORT || 3000)

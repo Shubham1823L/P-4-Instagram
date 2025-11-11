@@ -6,7 +6,7 @@ import User from "../models/User.js"
 import TempToken from "../models/Temp_verification_token.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-
+import createError from '../utils/createError.js'
 
 export async function signup(req, res) {//--> just for otp sending and tempToken generation
     const { email, username, fullName, password } = req.body
@@ -15,21 +15,19 @@ export async function signup(req, res) {//--> just for otp sending and tempToken
 
         // Is the email already registered
         try {
-            const user = await findUserByEmail(email)
-            if (user) return res.status(409).json({ error: "User already exists", code: "USER_ALREADY_EXISTS" })
-            //User must sign in , redirect him to signin page
+            const exists = await User.exists({ email })
+            if (exists) return res.fail(409, "EMAIL_TAKEN", "Email is already registered")
         } catch (err) {
-            return res.status(500).json({ error: err.message })
+            throw createError()
         }
 
         //User does not exist yet 
         // Check if username is available
         try {
-            const user = await User.findOne({ username })
-            if (user) return res.status(409).json({ error: "Username is taken", code: "USERNAME_IS_TAKEN" })
-            // Username is already taken , ask user to select a different one
+            const exists = await User.exists({ username })
+            if (exists) return res.fail(409, "USERNAME_IS_TAKEN", "Username is taken")
         } catch (error) {
-            return res.status(500).json({ error: error.message })
+            throw createError()
         }
 
         // Username is available , creating a temporary verification token and sending otp
