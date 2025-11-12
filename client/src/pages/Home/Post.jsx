@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styles from './home.module.css'
 import { MessageCircle, Send, Bookmark, Ellipsis } from 'lucide-react'
 import LikeButton from '../../components/Buttons/LikeButton';
@@ -11,7 +11,12 @@ const Post = ({ post }) => {
     const [isLiked, setIsLiked] = useState(post.likes.some(id => id == user._id))
     const [likesCount, setLikesCount] = useState(post.likesCount)
 
-
+    const postAge = useMemo(() => {
+        const change = new Date(Date.now()).getDate() - new Date(post.createdAt).getDate()
+        if (change <= 30) return change + " d"
+        if (change / 30 <= 12) return change / 30 + " w"
+        else return change / 365 + " y"
+    }, [])
 
     return (
         <article className={styles.post}>
@@ -19,7 +24,7 @@ const Post = ({ post }) => {
             <div className={styles.postHeader}>
                 <img src={post.author?.avatar?.secureUrl || "defaultAvatar.jpeg"} alt="avatar" />
                 <h2>{post.author?.username}</h2>
-                <span>1 w</span>
+                <span>{postAge}</span>
                 <button className={styles.moreOptions}><Ellipsis size={20} /></button>
             </div>
 
