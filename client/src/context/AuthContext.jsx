@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { AuthContext } from './../hooks/useAuth'
 import axios from 'axios'
 import LoadingPage from '../pages/Extras/LoadingPage'
+import toast from 'react-hot-toast'
 
 
 export const AuthProvider = ({ children }) => {
-
     const [user, setUser] = useState(null)
     const [token, setToken] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -13,20 +13,16 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const refreshSession = async () => {
             try {
-                console.log("inside refreshSession")
                 const response = await axios.post('/auth/refresh', {}, {
                     withCredentials: true,
                     baseURL: `${import.meta.env.VITE_API_BASE_URL}`
                 })
-                console.log(response)
-                const { accessToken, user } = response.data
+                const { data: { accessToken, user } } = response.data
                 setToken(accessToken)
                 setUser(user)
             } catch (error) {
-                const { status, data } = error.response
-                if (data.code === "TOKEN_NOT_FOUND") return
-                if (status === 500) return console.error("Internal Server Error. Please Retry")
-                if (data.code === "USER_NOT_FOUND") return console.warn("Unauthorized User")
+                if (error.response.status === 401) return toast("Session expired, please relogin")
+                return toast("Something went wrong, please refresh")
             }
 
 

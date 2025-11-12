@@ -10,18 +10,18 @@ function App() {
   const location = useLocation()
   const ref = useRef(null)
 
-  useEffect(() => {
-    const start = () => ref.current.continuousStart()
-    const complete = () => ref.current.complete()
-    apiEvents.on('start', start)
-    apiEvents.on('end', complete)
+  // useEffect(() => {
+  //   const start = () => ref.current.continuousStart()
+  //   const complete = () => ref.current.complete()
+  //   apiEvents.on('start', start)
+  //   apiEvents.on('end', complete)
 
-    return () => {
-      apiEvents.off('start', start)
-      apiEvents.off('end', complete)
-    }
+  //   return () => {
+  //     apiEvents.off('start', start)
+  //     apiEvents.off('end', complete)
+  //   }
 
-  }, [location])
+  // }, [location])
 
   return (
     <>

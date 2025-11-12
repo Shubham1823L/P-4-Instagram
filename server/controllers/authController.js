@@ -78,14 +78,14 @@ export const refreshAccessToken = async (req, res) => {
     try {
         const decoded = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET)
         const email = decoded.email
-        const exists = await User.exists({ email })
-        if (!exists) {
+        const user = await User.findOne({ email })
+        if (!user) {
             res.clearCookie('refreshToken', env.COOKIE_OPTIONS)
             throw new CustomError(401, "USER_NOT_FOUND", "User does not exist")
         }
 
         const accessToken = generateAccessToken(email)
-        return res.success(200, { accessToken }, "Access token refreshed successfully")
+        return res.success(200, { accessToken, user }, "Access token refreshed successfully")
 
     } catch (err) {
         const error = err.name

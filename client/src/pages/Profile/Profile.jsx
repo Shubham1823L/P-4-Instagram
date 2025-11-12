@@ -33,7 +33,7 @@ const Profile = () => {
             const { status, data } = await fetchUserfromAPI(params.username)
             if (status != 200) return console.error("error", data)
 
-            const user = data.user
+            const {user} = data.data
             setUser(user)
 
             //Sync initial followersCount value

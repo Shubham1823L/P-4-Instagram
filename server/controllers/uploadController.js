@@ -13,7 +13,7 @@ export const checkUploadsExists = async (req, res, next) => {
 
 export const uploadFileToCloudinary = async (req, res) => {
     const file = req.file
-    if (!file) return res.fail(400,"FILE_NOT_FOUND","The file you sent was either empty or could not be found")
+    if (!file) return res.fail(400, "FILE_NOT_FOUND", "The file you sent was either empty or could not be found")
 
     const result = await cloudinary.uploader.upload(file.path, {
         folder: "instaProject_uploads",
@@ -30,7 +30,7 @@ export const uploadFileToCloudinary = async (req, res) => {
     //If the upload is for avatar update
     file.fieldname == "avatar" && await User.updateOne({ _id: req.user._id }, { $set: { avatar: { secureUrl: secure_url, publicId: public_id } } })
 
-    res.status(200).json({
+    return res.success(200, {
         secureUrl: secure_url,
         publicId: public_id
     })

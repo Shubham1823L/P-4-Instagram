@@ -13,12 +13,17 @@ router.patch('/update', verifyAccessToken, asyncHandler(updateProfileData))
 
 router.delete('/', verifyAccessToken, asyncHandler(deleteProfile))
 
-router.param('username', asyncHandler(async (req, res, next, username) => {
-    const user = await User.findOne({ username })
-    if (!user) return res.fail(404, "USER_NOT_FOUND", "Requested user could not be found")
-    req.user = user
-    next()
-}))
+router.param('username', async (req, res, next, username) => {
+    try {
+        const user = await User.findOne({ username })
+        if (!user) return res.fail(404, "USER_NOT_FOUND", "Requested user could not be found")
+        req.user = user
+        next()
+    } catch (error) {
+        next(error)
+    }
+
+})
 
 
 export default router

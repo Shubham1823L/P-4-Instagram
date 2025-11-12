@@ -8,7 +8,7 @@ const FollowBtn = ({ username, isFollowing, setIsFollowing, setFollowersCount })
     const { updateUser } = useAuth()
     const toggleFollow = async () => {
         //Call ToggleFollowRoute
-        const { status, data } = await apiToggleFollowUser(username, isFollowing)
+        const { status, data:{data} } = await apiToggleFollowUser(username, isFollowing)
 
         if (status == 200) {
             const increment = isFollowing ? -1 : 1

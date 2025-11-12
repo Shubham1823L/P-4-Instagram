@@ -39,7 +39,7 @@ export const useAxiosInterceptors = () => {
                 originalRequest.hasRetried = true
                 try {
                     const response = await axios.post(`${baseUrl}/auth/refresh`, {}, { withCredentials: true })
-                    const newToken = response.data?.accessToken
+                    const newToken = response.data.data?.accessToken
                     updateToken(newToken)
 
                     originalRequest.headers['authorization'] = newToken && `Bearer ${newToken}`

@@ -21,7 +21,7 @@ const EnterOtp = () => {
 
         const response = await verifyOtp(value)
         if (response.status >= 400) return console.error("ERROR")
-        const { user, accessToken } = response.data
+        const { user, accessToken } = response.data.data
         updateToken(accessToken)
         updateUser(user)
         navigate(`/${user.username}`, { replace: true })

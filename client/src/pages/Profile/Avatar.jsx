@@ -10,7 +10,7 @@ const Avatar = ({ avatar, isAdmin }) => {
     const handleFileUpload = async (e) => {
         const file = e.target.files[0]
 
-        const { status, data } = await uploadAvatar(file)
+        const { status, data: { data } } = await uploadAvatar(file)
         if (status == 500) return console.error("Server side shit happened")
         if (status == 400) return console.error("File not received")
         if (status == 200) {

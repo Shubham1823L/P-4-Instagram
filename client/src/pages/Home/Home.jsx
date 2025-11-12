@@ -3,7 +3,7 @@ import styles from './home.module.css'
 import Story from './Story'
 import Post from './Post';
 import { apiFetchFeed } from '../../api/posts';
-
+import toast from 'react-hot-toast'
 
 const Home = () => {
   const [posts, setPosts] = useState([])
@@ -11,11 +11,11 @@ const Home = () => {
   //fetchUserFeed
   useEffect(() => {
     (async () => {
-      const { status, data } = await apiFetchFeed(1, 5)
+      const { status, data: { data } } = await apiFetchFeed(1, 5)
       if (status == 500) return console.error("Server side error, please be patient")
       if (status == 401) return console.error("Unauthorized")
       if (status == 200) {
-        setPosts(data)
+        setPosts(data.posts)
         return
       }
       console.warn('An Unexpected error occurred')

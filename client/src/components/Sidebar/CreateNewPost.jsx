@@ -6,6 +6,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 const CreateNewPost = ({ createNewPostRef, setMyPosts }) => {
     const navigate = useNavigate()
@@ -35,14 +36,22 @@ const CreateNewPost = ({ createNewPostRef, setMyPosts }) => {
         e.preventDefault() //consistency reasons, and readability as well
         setUploading(true)
         setTempURL(null)
-        const { status, data } = await uploadFile(file)
-        if (status == 400) return console.log("File was empty, Bad request")
-        if (status == 500) return console.log("Something went wrong on our end")
+        const { status, data: { data } } = await uploadFile(file)
+        if (status >= 300) {
+            createNewPostRef.current.style.display = "none"
+            setUploading(false)
+        }
+        if (status == 400) return toast.error("File was empty/invalid, Bad request")
+        if (status == 500) return toast.error("Something went wrong on our end")
         if (status == 200) {
             const response = await publishNewPost(data)
-            if (response.status == 500) return console.log("Something went wrong on our end")
+            if (response.status >= 300) {
+                createNewPostRef.current.style.display = "none"
+                setUploading(false)
+            }
+            if (response.status == 500) return toast.error("Something went wrong on our end")
             if (response.status == 200) {
-                setMyPosts(prev => [...prev, response.data.post])
+                setMyPosts(prev => [...prev, response.data.data.post])
                 setUploading(false)
                 setUploaded(true)
                 return

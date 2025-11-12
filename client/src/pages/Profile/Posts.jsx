@@ -15,7 +15,7 @@ const Posts = () => {
 
     useEffect(() => {
         (async () => {
-            const { status, data } = await fetchMyPosts(username, 1, 20)
+            const { status, data:{data} } = await fetchMyPosts(username, 1, 20)
             if (status == 500) return console.log("Something went wrong on our side getting your posts")
             if (status == 200) {
                 setAllPosts(prevPosts => [...prevPosts, ...data.posts])

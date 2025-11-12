@@ -1,6 +1,6 @@
 import multer from 'multer'
 import path from 'path'
-
+import CustomError from '../utils/CustomError.js'
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -13,8 +13,8 @@ const storage = multer.diskStorage({
     }
 })
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('image/') || file.mimetype.startWith('video/') ) return cb(null, true)
-    return cb(new Error("Only images and videos are allowed"), false)
+    if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) return cb(null, true)
+    cb(new CustomError(400, "FILE_INVALID", "Only images and videos are allowed"), false)
 }
 
 const upload = multer({ storage, fileFilter })

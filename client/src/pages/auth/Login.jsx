@@ -37,7 +37,7 @@ const Login = () => {
 
         //status:200 => OK
 
-        const { accessToken, user } = data
+        const { data: { accessToken, user } } = data
         updateToken(accessToken)
         updateUser(user)
         console.log(user.username)

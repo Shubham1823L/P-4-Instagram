@@ -15,7 +15,7 @@ const CommentSection = ({ postId }) => {
     const handlePostComment = async () => {
         setCommenting(true)
 
-        const { status, data } = await apiCreateComment(postId, comment)
+        const { status, data:{data} } = await apiCreateComment(postId, comment)
 
         setCommenting(false)
         setComment("")

@@ -4,6 +4,7 @@ import Sidebar from '../components/Sidebar/Sidebar'
 import { Outlet, useParams } from 'react-router-dom'
 import Footer from "../components/Footer/Footer"
 import clsx from 'clsx'
+import { Toaster } from 'react-hot-toast'
 
 const MainLayout = () => {
     const params = useParams()
@@ -27,6 +28,7 @@ const MainLayout = () => {
                     <Footer />
                 </main>
             </div>
+            <Toaster position='top-right'/>
         </>
     )
 }
