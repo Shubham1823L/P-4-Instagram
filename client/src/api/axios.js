@@ -45,7 +45,7 @@ export const useAxiosInterceptors = () => {
                     originalRequest.headers['authorization'] = newToken && `Bearer ${newToken}`
                     return api(originalRequest)
                 } catch (error) {
-                    console.error("Token refresh Failed:", error)
+                    console.error("Token refresh Failed")
                 }
 
             }

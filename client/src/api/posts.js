@@ -31,7 +31,7 @@ export const fetchMyPosts = async (username,page, limit) => {
         const response = await api.get(`/posts/${username}?page=${page}&limit=${limit}`)
         return response
     } catch (error) {
-        console.error("An error occurred while retreiving user's posts",{...error.response})
+        console.error("An error occurred while retreiving user's posts")
         return error.response
     }
 }

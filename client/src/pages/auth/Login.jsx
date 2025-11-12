@@ -40,7 +40,6 @@ const Login = () => {
         const { data: { accessToken, user } } = data
         updateToken(accessToken)
         updateUser(user)
-        console.log(user.username)
         navigate(`/${user.username}`, { replace: true })
 
     }

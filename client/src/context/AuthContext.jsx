@@ -21,8 +21,8 @@ export const AuthProvider = ({ children }) => {
                 setToken(accessToken)
                 setUser(user)
             } catch (error) {
-                if (error.response.status === 401) return toast("Session expired, please relogin")
-                return toast("Something went wrong, please refresh")
+                if (error.response.status === 401) console.log("New Session")
+                // return toast("Something went wrong, please refresh")
             }
 
 

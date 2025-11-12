@@ -98,7 +98,7 @@ const CreateNewPost = ({ createNewPostRef, setMyPosts }) => {
                                     <p>Drag photos and videos here</p>
                                     <div className={styles.selectFile}>
                                         <label htmlFor="fileUpload">Select from Computer</label>
-                                        <input onChange={handleFileSelect} id='fileUpload' type="file" accept='image/* video/*' />
+                                        <input onChange={handleFileSelect} id='fileUpload' type="file" accept='image/*, video/*' />
                                     </div>
                                 </section>
                             </>

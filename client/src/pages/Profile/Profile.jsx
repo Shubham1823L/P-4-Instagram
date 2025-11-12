@@ -31,7 +31,7 @@ const Profile = () => {
 
         (async () => {
             const { status, data } = await fetchUserfromAPI(params.username)
-            if (status != 200) return console.error("error", data)
+            if (status != 200) return console.error("error")
 
             const {user} = data.data
             setUser(user)

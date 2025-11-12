@@ -15,7 +15,6 @@ const PasswordField = ({ toggleValid,ref }) => {
         const value = ref.current.value
         if (!value) return setError("This is a required field")
         setError(null)
-        console.debug(regex.test(value))
         if (!regex.test(value)) return setError("Min. 8 characters with atleast one special , uppercase ,lowercase letter and a number")
     }
 

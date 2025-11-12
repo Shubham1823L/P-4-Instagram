@@ -22,7 +22,7 @@ const SearchMenu = ({ setIsOpen, searchInputRef }) => {
             if (searchQuery) {
                 (async () => {
                     const response = await callApiSearch(searchQuery, 1, 5)
-                    if (response.status == 500) return console.log("Server side bad", response)
+                    if (response.status == 500) return console.log("Server side bad")
                     if (response.status == 200) {
                         const users = response.data.data.users
                         setSearchedUsers(users)
