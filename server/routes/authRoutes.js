@@ -3,8 +3,9 @@ import { signup, login, logout, refreshAccessToken } from '../controllers/authCo
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
 import { validateEmail, validatePassword } from '../middlewares/validateMiddleware.js'
 import { verifyOtp } from '../controllers/otpController.js'
-const router = express.Router()
+import asyncHandler from '../utils/asyncHandler.js'
 
+const router = express.Router()
 
 router.post('/signup', validateEmail, asyncHandler(signup))
 

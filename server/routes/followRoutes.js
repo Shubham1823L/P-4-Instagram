@@ -2,6 +2,7 @@ import express from 'express'
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
 import User from '../models/User.js'
 import { toggleFollow } from '../controllers/followController.js'
+import asyncHandler from '../utils/asyncHandler.js'
 
 const router = express.Router()
 

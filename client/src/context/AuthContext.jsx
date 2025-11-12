@@ -13,10 +13,12 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const refreshSession = async () => {
             try {
+                console.log("inside refreshSession")
                 const response = await axios.post('/auth/refresh', {}, {
                     withCredentials: true,
                     baseURL: `${import.meta.env.VITE_API_BASE_URL}`
                 })
+                console.log(response)
                 const { accessToken, user } = response.data
                 setToken(accessToken)
                 setUser(user)

@@ -1,5 +1,6 @@
 import express from 'express'
 import { validateEmail, validateUsername } from '../controllers/validationController.js'
+import asyncHandler from '../utils/asyncHandler.js'
 
 const router = express.Router()
 

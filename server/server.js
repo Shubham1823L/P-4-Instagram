@@ -14,7 +14,7 @@ import uploadRoutes from './routes/uploadRoutes.js'
 import validationRoutes from './routes/validationRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import errorHandler from './middlewares/errorHandler.js'
-import responseHandler from './middlewares/responseHandler.js'
+import responseHandler from './utils/responseHandler.js'
 
 const app = express()
 
@@ -34,8 +34,8 @@ app.use('/api', followRoutes)
 app.use('/api/posts', postRoutes)
 app.use('/api/postInteractions/:id', postInteractionRoutes)
 app.use('/api/upload', uploadRoutes)
-app.use('/api/validate',validationRoutes)
-app.use('/api/users',userRoutes)
+app.use('/api/validate', validationRoutes)
+app.use('/api/users', userRoutes)
 
 app.use(errorHandler)
 

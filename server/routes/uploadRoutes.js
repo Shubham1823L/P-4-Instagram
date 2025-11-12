@@ -2,6 +2,7 @@ import express from 'express'
 import upload from '../middlewares/multerMiddleware.js'
 import { checkUploadsExists, uploadFileToCloudinary } from '../controllers/uploadController.js'
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
+import asyncHandler from '../utils/asyncHandler.js'
 
 const router = express.Router()
 

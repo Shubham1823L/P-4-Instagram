@@ -2,6 +2,8 @@ import express from 'express'
 import { createComment, deleteComment, getComments, toggleLike } from '../controllers/postInteractionController.js'
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
 import Post from '../models/Post.js'
+import asyncHandler from '../utils/asyncHandler.js'
+
 
 const router = express.Router({ mergeParams: true })
 

@@ -5,3 +5,5 @@ const asyncHandler = (controller) => {
         //in either cases, if it throws i.e. fails, call catch which has next so it calls next but auto feeds err as the arg , err is the error thrown by fn
     }
 }
+
+export default asyncHandler

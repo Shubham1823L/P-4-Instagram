@@ -1,6 +1,8 @@
 import express from 'express'
 import { createPost, deletePost, getFeedPosts, getMyPosts } from '../controllers/postController.js'
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
+import asyncHandler from '../utils/asyncHandler.js'
+
 const router = express.Router()
 
 router.post('/', verifyAccessToken, asyncHandler(createPost))

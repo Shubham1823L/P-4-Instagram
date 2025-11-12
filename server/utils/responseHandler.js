@@ -5,6 +5,7 @@ const successHandler = (req, res, next) => {
     res.fail = (status, code, message) => {
         res.status(status).json({ sucess: false, code, message })
     }
+    next()
 }
 
 export default successHandler

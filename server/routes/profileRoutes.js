@@ -2,7 +2,7 @@ import express from 'express'
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
 import User from '../models/User.js'
 import { deleteProfile, getProfileData, updateProfileData } from '../controllers/profileController.js'
-
+import asyncHandler from '../utils/asyncHandler.js'
 
 
 const router = express.Router()
