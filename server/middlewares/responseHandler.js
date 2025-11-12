@@ -1,8 +1,8 @@
 const successHandler = (req, res, next) => {
-    res.success = (res, status, data, message) => {
+    res.success = (status = 200, data = "OK", message = "Successful Request") => {
         res.status(status).json({ success: true, data, message })
     }
-    res.fail = (res, status, code, message) => {
+    res.fail = (status, code, message) => {
         res.status(status).json({ sucess: false, code, message })
     }
 }

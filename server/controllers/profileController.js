@@ -1,9 +1,11 @@
 import env from "../config/env.js"
 import User from "../models/User.js"
 import userCleanupService from '../services/userCleanupService.js'
+
+
 export const getProfileData = (req, res) => {
     const user = req.user
-    res.status(200).json({ user })
+    res.success(200, { user })
 }
 
 export const updateProfileData = async (req, res) => {
@@ -22,8 +24,8 @@ export const updateProfileData = async (req, res) => {
     for (const key in updates) {
         updated.$set[key] = updates[key]
     }
-    await User.updateOne({ _id }, updated)
-    res.status(200).json({ message: "Profile Updated" })
+    const updatedUser = await User.updateOne({ _id }, updated)
+    res.success(200, { user: updatedUser }, "Your profile was updated successfully")
 }
 
 export const deleteProfile = async (req, res) => {

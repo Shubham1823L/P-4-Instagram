@@ -5,20 +5,20 @@ import Post from '../models/Post.js'
 
 const router = express.Router({ mergeParams: true })
 
-router.use(async (req, res, next) => {
+router.use(asyncHandler(async (req, res, next) => {
     const id = req.params.id
     const post = await Post.findById(id)
-    if (!post) return res.status(404).json({ error: "Post Not Found" })
+    if (!post) return res.fail(404, "POST_NOT_FOUND", "The post you requested could not be found")
     req.post = post
     next()
-})
+}))
 
-router.post('/like', verifyAccessToken, toggleLike)
+router.post('/like', verifyAccessToken, asyncHandler(toggleLike))
 
-router.post('/comment', verifyAccessToken, createComment)
+router.post('/comment', verifyAccessToken, asyncHandler(createComment))
 
-router.get('/comments', getComments)
+router.get('/comments', asyncHandler(getComments))
 
-router.delete('/comments/:commentId', verifyAccessToken, deleteComment)
+router.delete('/comments/:commentId', verifyAccessToken, asyncHandler(deleteComment))
 
 export default router

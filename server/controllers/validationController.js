@@ -1,32 +1,24 @@
 import Joi from "joi"
-import { findUserByEmail, findUserByUsername } from "../utils/userUtils.js"
+import User from "../models/User.js"
 
 export const validateEmail = async (req, res) => {
     const schema = Joi.object({
         email: Joi.string().email().required()
     })
+
     const { value, error } = schema.validate({ email: req.body.email })
-    if (error) return res.status(400).json({ error: error.details[0].message, code: "INVALID_FORMAT" })
+    if (error) return res.fail(400, "EMAIL_INVALID", "The email you entered had an invalid format")
 
-    try {
+    const exists = await User.exists({ email: value.email })
+    if (exists) return res.fail(409, "EMAIL_IS_TAKEN", "Email is already registered, please login")
 
-        const user = await findUserByEmail(value.email)
-        if (user) return res.status(409).json({ error: "User already exists", code: "USER_ALREADY_EXISTS" })
-    } catch (error) {
-        console.error(error)
-        return res.status(500).json({ error: error.details[0].message })
-    }
     return res.sendStatus(200)
 }
 
 
 export const validateUsername = async (req, res) => {
-    try {
-        const user = await findUserByUsername(req.body.username)
-        if (user) return res.status(409).json({ error: "Username already taken", code: "USERNAME_ALREADY_TAKEN" })
-    } catch (error) {
-        console.error(error)
-        return res.status(500).json({ error: error.detail[0].message })
-    }
+    const exists = await User.exists({ username: req.body.username })
+    if (exists) return res.fail(409, "USERNAME_IS_TAKEN", "Username is already taken")
+
     return res.sendStatus(200)
 }

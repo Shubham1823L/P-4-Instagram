@@ -3,7 +3,8 @@ import { validateEmail, validateUsername } from '../controllers/validationContro
 
 const router = express.Router()
 
-router.post('/email',validateEmail)
-router.post('/username',validateUsername)
+router.post('/email', asyncHandler(validateEmail))
+
+router.post('/username', asyncHandler(validateUsername))
 
 export default router

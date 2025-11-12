@@ -11,5 +11,6 @@ const tempTokenSchema = new mongoose.Schema({
         default: Date.now,
     }
 })
+
 tempTokenSchema.index({ createdAt: 1 }, { expireAfterSeconds: 15 * 60 })
 export default mongoose.model("Temp_verification_token", tempTokenSchema)

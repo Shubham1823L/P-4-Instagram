@@ -25,10 +25,10 @@ export const getUsers = async (req, res) => {
                 _id: 1,
                 username: 1,
                 fullName: 1,
-                avatar:1,
+                avatar: 1,
             }
         }
     ])
 
-    return res.status(200).json({ users })
+    return res.success(200, { users })
 }

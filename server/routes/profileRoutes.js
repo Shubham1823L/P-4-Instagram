@@ -7,19 +7,18 @@ import { deleteProfile, getProfileData, updateProfileData } from '../controllers
 
 const router = express.Router()
 
-router.get('/:username', getProfileData)
+router.get('/:username', asyncHandler(getProfileData))
 
-router.patch('/update', verifyAccessToken, updateProfileData)
+router.patch('/update', verifyAccessToken, asyncHandler(updateProfileData))
 
-router.delete('/', verifyAccessToken, deleteProfile)
+router.delete('/', verifyAccessToken, asyncHandler(deleteProfile))
 
-
-router.param('username', async (req, res, next, username) => {
+router.param('username', asyncHandler(async (req, res, next, username) => {
     const user = await User.findOne({ username })
-    if (!user) return res.status(404).json({ error: "User not found" })
+    if (!user) return res.fail(404, "USER_NOT_FOUND", "Requested user could not be found")
     req.user = user
     next()
-})
+}))
 
 
 export default router

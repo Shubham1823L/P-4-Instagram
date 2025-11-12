@@ -2,8 +2,8 @@ import express from 'express'
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
 import { getUsers } from '../controllers/userController.js'
 
-const router =express.Router()
+const router = express.Router()
 
-router.get('/:username',verifyAccessToken,getUsers)
+router.get('/:username', verifyAccessToken, asyncHandler(getUsers))
 
 export default router

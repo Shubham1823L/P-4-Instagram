@@ -6,15 +6,15 @@ import { verifyOtp } from '../controllers/otpController.js'
 const router = express.Router()
 
 
-router.post('/signup', validateEmail, signup)
+router.post('/signup', validateEmail, asyncHandler(signup))
 
-router.post('/signup/verify', verifyOtp)
+router.post('/signup/verify', asyncHandler(verifyOtp))
 
-router.post('/login', validateEmail, validatePassword, login)
+router.post('/login', validateEmail, validatePassword, asyncHandler(login))
 
-router.post('/logout', verifyAccessToken, logout)
+router.post('/logout', verifyAccessToken, asyncHandler(logout))
 
-router.post('/refresh', refreshAccessToken)
+router.post('/refresh', asyncHandler(refreshAccessToken))
 
 
 export default router

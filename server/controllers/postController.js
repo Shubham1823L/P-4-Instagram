@@ -4,7 +4,8 @@ import { findUserByUsername } from '../utils/userUtils.js'
 
 export const createPost = async (req, res) => {
     const postData = req.body
-    if (!postData) return res.status(404).json({ error: "Nothing received in postData" })
+    if (!postData) return res.fail(400, "POST_DATA_EMPTY", "Post data was empty")
+
     const user = req.user
     const post = await Post.create({
         author: user._id,
@@ -13,20 +14,10 @@ export const createPost = async (req, res) => {
             publicId: postData.publicId
         }
     })
+
     user.posts.push(post._id)
     await user.save()
-    res.status(200).json({ post })
-}
-
-export const getPost = async (req, res) => {
-    const postId = req.params.postId
-    try {
-        const post = await Post.findById(postId).populate('author')
-        return res.status(200).json({ message: post })
-    } catch (error) {
-        return res.status(500).json({ error })
-    }
-
+    return res.success(200, { post }, "Post was created successfully")
 }
 
 export const getFeedPosts = async (req, res) => {
@@ -35,66 +26,54 @@ export const getFeedPosts = async (req, res) => {
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
 
-
-    try {
-        const posts = await Post.aggregate([
-            {
-                $match: { author: { $in: following } }
-            },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "author",
-                    foreignField: "_id",
-                    as: "author"
-                }
-            },
-            {
-                $unwind: "$author"
-            },
-            {
-                $sort: { createdAt: -1 }
-            },
-            {
-                $skip: (page - 1) * limit
-            },
-            {
-                $limit: limit
-            },
-            {
-                $project: {
-                    likesCount: 1,
-                    commentsCount: 1,
-                    createdAt: 1,
-                    content:1,
-                    commentsCount: 1,
-                    likes:1,
-                    author: {
-                        username: 1,
-                        followersCount: 1,
-                        avatar:1
-                    }
+    const posts = await Post.aggregate([
+        {
+            $match: { author: { $in: following } }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "author",
+                foreignField: "_id",
+                as: "author"
+            }
+        },
+        {
+            $unwind: "$author"
+        },
+        {
+            $sort: { createdAt: -1 }
+        },
+        {
+            $skip: (page - 1) * limit
+        },
+        {
+            $limit: limit
+        },
+        {
+            $project: {
+                likesCount: 1,
+                commentsCount: 1,
+                createdAt: 1,
+                content: 1,
+                commentsCount: 1,
+                likes: 1,
+                author: {
+                    username: 1,
+                    followersCount: 1,
+                    avatar: 1
                 }
             }
-        ])
-        return res.status(200).json(posts)
-
-    } catch (error) {
-        console.log(error)
-        return res.sendStatus(500)
-    }
+        }
+    ])
+    return res.success(200, { posts })
 
 }
 
 export const getMyPosts = async (req, res) => {
-    let user
-    try {
-        user = await findUserByUsername(req.params.username)
-        if (!user) return res.status(404).json({ error: "User not found", code: "USER_NOT_FOUND" })
-    } catch (error) {
-        console.error(error.message)
-        return res.status(500).json({ error: "Error fetching user by username" })
-    }
+    const user = await findUserByUsername(req.params.username)
+    if (!user) return res.fail(404, "USER_NOT_FOUND", "User does not exist, cannot fetch posts")
+
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
     const posts = await Post.aggregate([
@@ -112,7 +91,7 @@ export const getMyPosts = async (req, res) => {
         }
     ])
 
-    return res.status(200).json({ posts })
+    return res.success(200, { posts })
 }
 
 
@@ -122,8 +101,8 @@ export const deletePost = async (req, res) => {
     const user = req.user
     const post = await Post.findById(req.params.postId)
 
-    if (!post) return res.status(404).json({ error: "Post not found!" })
-    if (post.author.toString() != user._id.toString()) return res.status(403).json({ error: "Forbidden! Cannot delete posts of other users" })
+    if (!post) return res.fail(404, "POST_NOT_FOUND", "Requested post was not found")
+    if (post.author.toString() != user._id.toString()) return res.fail(403, "FORBIDDEN_DELETE", "You are not allowed to delete posts of other users")
 
     await postCleanupService(post, user)
     res.sendStatus(204)

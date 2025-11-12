@@ -2,10 +2,10 @@ export const toggleFollow = async (req, res) => {
     const toBeFollowed = req.toBeFollowed //or toBeUnfollowed
     const follower = req.user
     const followerId = follower._id
-    if (toBeFollowed.username == follower.username) return res.status(400).json({ error: "Can't follow yourself" })
-    const index = toBeFollowed.followers.findIndex(e => {
-        return e.toString() == followerId.toString()
-    })
+
+    if (toBeFollowed.username == follower.username) return res.fail(400, "CANNOT_FOLLOW_SELF", "You cannot follow yourself")
+
+    const index = toBeFollowed.followers.findIndex(e => e.toString() == followerId.toString())
     if (index == -1) {
         // Not following yet, follow now
         toBeFollowed.followers.push(followerId)
@@ -14,7 +14,7 @@ export const toggleFollow = async (req, res) => {
         follower.followingCount++
         await follower.save()
         await toBeFollowed.save()
-        return res.status(200).json({ message: `Now following: ${toBeFollowed.username}`, user: follower })
+        return res.success(200, "OK", `Now following: ${toBeFollowed.username}`)
     }
     else {
         // Alerady following, unfollow now
@@ -24,7 +24,7 @@ export const toggleFollow = async (req, res) => {
         follower.followingCount--
         await follower.save()
         await toBeFollowed.save()
-        return res.status(200).json({ message: `Unfollowed: ${toBeFollowed.username}`, user: follower })
+        return res.success(200, "OK", `Unfollowed: ${toBeFollowed.username}`)
     }
 
 }

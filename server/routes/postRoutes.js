@@ -1,18 +1,15 @@
 import express from 'express'
-import { createPost, deletePost, getFeedPosts, getMyPosts, getPost } from '../controllers/postController.js'
+import { createPost, deletePost, getFeedPosts, getMyPosts } from '../controllers/postController.js'
 import { verifyAccessToken } from '../middlewares/authMiddleware.js'
 const router = express.Router()
 
-router.post('/', verifyAccessToken, createPost)
+router.post('/', verifyAccessToken, asyncHandler(createPost))
 
+router.get('/feed', verifyAccessToken, asyncHandler(getFeedPosts))
 
-router.get('/feed', verifyAccessToken, getFeedPosts)
+router.get('/:username', verifyAccessToken, asyncHandler(getMyPosts))
 
-router.get('/:username',verifyAccessToken,getMyPosts)
-
-router.get('/:postId', getPost)
-
-router.delete('/:postId', verifyAccessToken, deletePost)
+router.delete('/:postId', verifyAccessToken, asyncHandler(deletePost))
 
 
 export default router

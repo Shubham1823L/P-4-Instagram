@@ -5,13 +5,13 @@ import { toggleFollow } from '../controllers/followController.js'
 
 const router = express.Router()
 
-router.post('/follow/:username', verifyAccessToken, toggleFollow)
+router.post('/follow/:username', verifyAccessToken, asyncHandler(toggleFollow))
 
-router.delete('/unfollow/:username', verifyAccessToken, toggleFollow)
+router.delete('/unfollow/:username', verifyAccessToken, asyncHandler(toggleFollow))
 
 router.param('username', async (req, res, next, username) => {
     const user = await User.findOne({ username })
-    if (!user) return res.status(404).json({ error: "User not found" })
+    if (!user) return res._final(404,"USER_NOT_FOUND","Requested user could not be found")
     req.toBeFollowed = user
     next()
 })
